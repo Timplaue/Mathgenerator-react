@@ -36,3 +36,14 @@
     transform: rotate(360deg);
   }
 }
+@font-face {
+  font-family: 'Gotham';
+  src: url('./fonts/gotham_bold.otf') format('opentype'),
+  url('./fonts/gotham_medium.otf') format('opentype');
+  font-weight: normal;
+}
+
+body {
+  background-image: url(../public/images/bg.svg);
+  font-family: 'Gotham', Arial, sans-serif;
+}

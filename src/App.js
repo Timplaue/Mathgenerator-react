@@ -1,25 +1,61 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import DifficultySelection from './components/DifficultySelection';
+import Example from './components/Example';
+import Register from './components/Register';
+import Login from './components/Login';
+import logo from './assets/logo.svg'; // Путь к вашему логотипу
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [difficulty, setDifficulty] = useState(null);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isRegistering, setIsRegistering] = useState(false); // Изменено на false для отображения формы авторизации первой
+
+    const handleSelectDifficulty = (level) => {
+        setDifficulty(level);
+    };
+
+    const handleLogin = () => {
+        setIsAuthenticated(true);
+    };
+
+    const handleRegister = () => {
+        setIsRegistering(false); // После регистрации показываем форму входа
+    };
+
+    return (
+        <div className="App">
+            {!isAuthenticated ? (
+                isRegistering ? (
+                    <div>
+                        <h1>Регистрация</h1>
+                        <Register onRegister={handleRegister} />
+                    </div>
+                ) : (
+                    <div>
+                        <img src={logo} alt="Logo" />
+                        <h1>Добро пожаловать!</h1>
+                        <Login onLogin={handleLogin} />
+                    </div>
+                )
+            ) : (
+                <div>
+                    <img src={logo} alt="Logo" />
+                    <h1>Мат генератор</h1>
+                    {difficulty ? (
+                        <Example difficulty={difficulty} />
+                    ) : (
+                        <DifficultySelection onSelectDifficulty={handleSelectDifficulty} />
+                    )}
+                </div>
+            )}
+            {isAuthenticated || (
+                <button onClick={() => setIsRegistering(!isRegistering)}>
+                    {isRegistering ? 'Уже есть аккаунт? Войти' : 'Нет аккаунта? Зарегестрироваться'}
+                </button>
+            )}
+        </div>
+    );
 }
 
 export default App;
