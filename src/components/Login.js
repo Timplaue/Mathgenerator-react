@@ -3,7 +3,7 @@ import axios from 'axios';
 import "./Login.css";
 import logo from '../assets/logo.svg';
 
-function Login({ onLogin }) {
+function Login({ onLogin, onToggleRegister }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -24,6 +24,9 @@ function Login({ onLogin }) {
             <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
             <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
             <button onClick={handleLogin}>Войти</button>
+            <button onClick={onToggleRegister} className="toggle-button">
+                Регистрация
+            </button>
         </div>
     );
 }

@@ -8,7 +8,7 @@ import Login from './components/Login';
 function App() {
     const [difficulty, setDifficulty] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [isRegistering, setIsRegistering] = useState(false); // Изменено на false для отображения формы авторизации первой
+    const [isRegistering, setIsRegistering] = useState(false); // Начальное состояние — авторизация
 
     const handleSelectDifficulty = (level) => {
         setDifficulty(level);
@@ -22,7 +22,9 @@ function App() {
         setIsRegistering(false); // После регистрации показываем форму входа
     };
 
-    // Функция для сброса выбора сложности
+    const toggleRegister = () => {
+        setIsRegistering(!isRegistering); // Переключение между регистрацией и авторизацией
+    };
     const handleBackToDifficultySelection = () => {
         setDifficulty(null);
     };
@@ -36,9 +38,7 @@ function App() {
                         <Register onRegister={handleRegister} />
                     </div>
                 ) : (
-                    <div>
-                        <Login onLogin={handleLogin} />
-                    </div>
+                    <Login onLogin={handleLogin} onToggleRegister={toggleRegister} />
                 )
             ) : (
                 <div>
@@ -48,11 +48,6 @@ function App() {
                         <DifficultySelection onSelectDifficulty={handleSelectDifficulty} />
                     )}
                 </div>
-            )}
-            {isAuthenticated || (
-                <button onClick={() => setIsRegistering(!isRegistering)}>
-                    {isRegistering ? 'Войти' : 'Регистрация'}
-                </button>
             )}
         </div>
     );
