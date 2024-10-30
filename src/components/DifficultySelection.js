@@ -1,12 +1,17 @@
 import React from 'react';
+import './DifficultySelection.css';
+import logo from '../assets/logo.svg';
+
 
 function DifficultySelection({ onSelectDifficulty }) {
     return (
         <div>
-            <h2>Select Difficulty</h2>
-            <button onClick={() => onSelectDifficulty('easy')}>Easy</button>
-            <button onClick={() => onSelectDifficulty('medium')}>Medium</button>
-            <button onClick={() => onSelectDifficulty('hard')}>Hard</button>
+            <img src={logo}/>
+            <h1>Мат генератор</h1>
+            <h2>Новый уровень</h2>
+            <button onClick={() => onSelectDifficulty('Легкий')}>Легкий</button>
+            <button onClick={() => onSelectDifficulty('Средний')}>Средний</button>
+            <button onClick={() => onSelectDifficulty('Сложный')}>Сложный</button>
         </div>
     );
 }

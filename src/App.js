@@ -4,7 +4,6 @@ import DifficultySelection from './components/DifficultySelection';
 import Example from './components/Example';
 import Register from './components/Register';
 import Login from './components/Login';
-import logo from './assets/logo.svg'; // Путь к вашему логотипу
 
 function App() {
     const [difficulty, setDifficulty] = useState(null);
@@ -23,6 +22,11 @@ function App() {
         setIsRegistering(false); // После регистрации показываем форму входа
     };
 
+    // Функция для сброса выбора сложности
+    const handleBackToDifficultySelection = () => {
+        setDifficulty(null);
+    };
+
     return (
         <div className="App">
             {!isAuthenticated ? (
@@ -33,17 +37,13 @@ function App() {
                     </div>
                 ) : (
                     <div>
-                        <img src={logo} alt="Logo" />
-                        <h1>Добро пожаловать!</h1>
                         <Login onLogin={handleLogin} />
                     </div>
                 )
             ) : (
                 <div>
-                    <img src={logo} alt="Logo" />
-                    <h1>Мат генератор</h1>
                     {difficulty ? (
-                        <Example difficulty={difficulty} />
+                        <Example difficulty={difficulty} onBack={handleBackToDifficultySelection} />
                     ) : (
                         <DifficultySelection onSelectDifficulty={handleSelectDifficulty} />
                     )}
@@ -51,7 +51,7 @@ function App() {
             )}
             {isAuthenticated || (
                 <button onClick={() => setIsRegistering(!isRegistering)}>
-                    {isRegistering ? 'Уже есть аккаунт? Войти' : 'Нет аккаунта? Зарегестрироваться'}
+                    {isRegistering ? 'Войти' : 'Регистрация'}
                 </button>
             )}
         </div>

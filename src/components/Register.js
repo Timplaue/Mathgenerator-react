@@ -7,9 +7,11 @@ function Register({ onRegister }) {
 
     const handleRegister = async () => {
         try {
+            console.log("Registering user:", { username, password }); // Лог отправляемых данных
             await axios.post('http://localhost:5000/api/register', { username, password });
-            onRegister(); // Вызываем callback для переключения на форму входа
+            onRegister();
         } catch (error) {
+            console.error("Registration error:", error.response || error.message); // Лог ошибки
             alert("Error registering user");
         }
     };

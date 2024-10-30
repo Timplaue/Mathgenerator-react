@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import "./Login.css";
+import logo from '../assets/logo.svg';
 
 function Login({ onLogin }) {
     const [username, setUsername] = useState('');
@@ -16,10 +18,12 @@ function Login({ onLogin }) {
     };
 
     return (
-        <div>
+        <div className="block">
+            <img src={logo} alt="Logo" className="login-logo"/>
+            <h1>Добро пожаловать!</h1>
             <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
             <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-            <button onClick={handleLogin}>Login</button>
+            <button onClick={handleLogin}>Войти</button>
         </div>
     );
 }
