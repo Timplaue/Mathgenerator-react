@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import './App.css';
-import DifficultySelection from './components/DifficultySelection';
-import Example from './components/Example';
 import Register from './components/Register';
 import Login from './components/Login';
+import DifficultySelection from './components/DifficultySelection';
+import Example from './components/Example';
 
 function App() {
     const [difficulty, setDifficulty] = useState(null);

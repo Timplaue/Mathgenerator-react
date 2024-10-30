@@ -1,17 +1,32 @@
 import React from 'react';
 import './DifficultySelection.css';
 import logo from '../assets/logo.svg';
-
+import easy from '../assets/easy.svg';
+import normal from '../assets/normal.svg';
+import hard from '../assets/hard.svg';
 
 function DifficultySelection({ onSelectDifficulty }) {
     return (
-        <div>
-            <img src={logo}/>
-            <h1>Мат генератор</h1>
-            <h2>Новый уровень</h2>
-            <button onClick={() => onSelectDifficulty('Легкий')}>Легкий</button>
-            <button onClick={() => onSelectDifficulty('Средний')}>Средний</button>
-            <button onClick={() => onSelectDifficulty('Сложный')}>Сложный</button>
+        <div className="block2">
+            <div className="header">
+                <img src={logo} className="difficulty-logo" alt="logo"/>
+                <h1 className="header">Мат <br/>генератор</h1>
+            </div>
+            <h2 className="header">• Новый уровень</h2>
+            <div className="buttons">
+                <button className="easy" onClick={() => onSelectDifficulty('Легкий')}>
+                    <span className="button-text">Легкий</span>
+                    <img src={easy} alt="easy"/>
+                </button>
+                <button className="normal" onClick={() => onSelectDifficulty('Средний')}>
+                    <span className="button-text">Средний</span>
+                    <img src={normal} alt="normal"/>
+                </button>
+                <button className="hard" onClick={() => onSelectDifficulty('Сложный')}>
+                    <span className="button-text">Сложный</span>
+                    <img src={hard} alt="hard"/>
+                </button>
+            </div>
         </div>
     );
 }

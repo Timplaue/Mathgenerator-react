@@ -1,0 +1,91 @@
+.difficulty-logo {
+    width: 100px;
+    height: 100px;
+    margin-right: 10px; /* расстояние между img и h1 */
+}
+
+.block2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    max-width: 400px;
+    margin: 10vh auto;
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    align-items: center; /* выравнивает img и h1 по вертикали */
+    margin-bottom: 20px; /* отступ под img и h1 */
+}
+h1.header {
+    font-size: 20px;
+    text-align: left;
+    font-weight: bold;
+}
+h2.header {
+    text-align: left; /* Выравнивание текста по левому краю */
+    font-weight: bold; /* Жирный текст */
+    width: 60%; /* Занимает всю ширину родителя */
+    margin: 0; /* Убираем отступы для правильного выравнивания */
+}
+button.block2 {
+    border: inherit;
+    border: 2px solid #000000;
+    border-radius: 8px;
+    margin-top: 30px;
+}
+.button-text {
+    position: absolute;
+    left: 15%;
+    top: 40%;
+    color: black;
+    font-family: 'Gotham-bold', Arial, sans-serif;
+    font-size: 15px;
+}
+
+.block2 button {
+    position: relative; /* Устанавливаем позиционирование для кнопки */
+    display: flex; /* Используем flex для выравнивания содержимого */
+    align-items: flex-start; /* Привязываем содержимое к верхнему краю */
+    justify-content: flex-end; /* Привязываем содержимое к правому краю */
+    padding: 0; /* Убираем внутренние отступы */
+    margin-top: 20px;
+    border: 2px solid #000000; /* Граница кнопки */
+    border-radius: 8px; /* Скругление углов */
+    overflow: hidden; /* Скрывает выходящее за пределы содержимое */
+}
+
+.block2 button img {
+    position: absolute; /* Позиционируем изображение абсолютно внутри кнопки */
+    top: 0; /* Привязываем к верхнему краю */
+    right: 0; /* Привязываем к правому краю */
+    bottom: 0; /* Привязываем к нижнему краю */
+    width: auto; /* Устанавливаем ширину в авто для сохранения соотношения */
+    height: 100%; /* Задаем высоту в 100% для заполнения кнопки */
+    object-fit: cover; /* Масштабируем изображение, сохраняя соотношение сторон */
+}
+.easy {
+    background-color: #78DEB3;
+    box-shadow: 5px 5px #000000;
+    border-radius: 8px;
+    width: 30vh;
+    height: 15vh;
+}
+.normal {
+    background-color: #E9CB30;
+    box-shadow: 5px 5px #000000;
+    border-radius: 8px;
+    width: 30vh;
+    height: 15vh;
+}
+.hard {
+    background-color: #ED9069;
+    box-shadow: 5px 5px #000000;
+    border-radius: 8px;
+    width: 30vh;
+    height: 15vh;
+}
