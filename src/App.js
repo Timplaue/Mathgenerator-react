@@ -25,6 +25,7 @@ function App() {
     const toggleRegister = () => {
         setIsRegistering(!isRegistering); // Переключение между регистрацией и авторизацией
     };
+
     const handleBackToDifficultySelection = () => {
         setDifficulty(null);
     };
@@ -34,11 +35,10 @@ function App() {
             {!isAuthenticated ? (
                 isRegistering ? (
                     <div>
-                        <h1>Регистрация</h1>
-                        <Register onRegister={handleRegister} />
+                        <Register onRegister={handleRegister} toggleAuthForm={toggleRegister} />
                     </div>
                 ) : (
-                    <Login onLogin={handleLogin} onToggleRegister={toggleRegister} />
+                    <Login onLogin={handleLogin} toggleAuthForm={toggleRegister} />
                 )
             ) : (
                 <div>

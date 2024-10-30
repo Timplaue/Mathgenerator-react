@@ -3,7 +3,7 @@ import axios from 'axios';
 import "./Login.css";
 import logo from '../assets/logo.svg';
 
-function Login({ onLogin, onToggleRegister }) {
+function Login({ onLogin, toggleAuthForm}) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -21,10 +21,10 @@ function Login({ onLogin, onToggleRegister }) {
         <div className="block">
             <img src={logo} alt="Logo" className="login-logo"/>
             <h1>Добро пожаловать!</h1>
-            <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-            <button onClick={handleLogin}>Войти</button>
-            <button onClick={onToggleRegister} className="toggle-button">
+            <input className="auth" type="text" placeholder="Логин" value={username} onChange={(e) => setUsername(e.target.value)} />
+            <input className="auth" type="password" placeholder="Пароль" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <button className="auth" onClick={handleLogin}>Войти</button>
+            <button onClick={toggleAuthForm} className="toggle-button">
                 Регистрация
             </button>
         </div>

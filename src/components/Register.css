@@ -1,0 +1,44 @@
+button.registration {
+    margin-top: 20px;
+    width: 50%;
+    padding: 12px;
+    background-color: #000000;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.block1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    max-width: 400px;
+    margin: 20vh auto;
+    padding: 20px;
+}
+.left {
+    text-align: left;
+}
+h1.registration{
+    font-size: 35px;
+    text-align: left;
+}
+input.registration {
+    width: 100%;
+    padding: 12px;
+    margin: 5px 0;
+    border: 2px solid #61C199;
+    border-radius: 8px;
+    background-color: #D0FDEA;
+}
+h2 {
+    margin: 15px 0 0 0;
+    padding: 0;
+    font-family: 'Gotham', Arial, sans-serif;
+    font-size: 15px;
+}

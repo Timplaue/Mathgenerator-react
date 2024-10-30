@@ -12,51 +12,51 @@
 }
 
 .login-logo {
-    width: 80px;
-    height: 80px;
+    width: 150px;
+    height: 150px;
     margin-bottom: 20px;
 }
 
 h1 {
-    font-size: 24px;
+    font-size: 25px;
     font-weight: 600;
     color: #333;
     margin-bottom: 20px;
     text-align: center;
 }
 
-input {
-    width: 100%;
+input.auth {
+    width: 70%;
     padding: 12px;
     margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 2px solid #000000;
+    border-radius: 8px;
     font-size: 16px;
+    background-color: #E0E0E0;
+    box-shadow: 5px 5px #61C199;
 }
 
-button {
-    width: 100%;
+button.auth {
+    margin-top: 20px;
+    width: 25%;
     padding: 12px;
-    background-color: #4caf50;
+    background-color: #000000;
     color: #fff;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
-button:hover {
-    background-color: #45a049;
-}
 .toggle-button {
-    margin-top: 10px;
+    margin-top: 20px;
     background-color: transparent;
     border: none;
-    color: #4caf50;
+    color: #61C199;
     font-size: 16px;
     cursor: pointer;
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 .toggle-button:hover {
