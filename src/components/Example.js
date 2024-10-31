@@ -11,6 +11,11 @@ function Example({ difficulty, onBack }) {
     const [timeLeft, setTimeLeft] = useState(120); // 2 минуты в секундах
     const [progress, setProgress] = useState(0);
 
+    const colors = {
+        Легкий: "#61C199",
+        Средний: "#E9CB30",
+        Сложный: "#ED9069"
+    };
     useEffect(() => {
         fetchExample();
     }, []);
@@ -69,11 +74,11 @@ function Example({ difficulty, onBack }) {
                 <div className="example-block">
                     <img src={logo} alt="logo" className="example-logo"/>
                     <div className="header">
-                        <h2>Уровень: <span className="difficulty-level">{difficulty}</span></h2>
+                        <h2 style={{color: colors[difficulty]}}><span style={{ color: 'black' }}>Уровень</span><span></span> {difficulty}</h2>
                         <p className="timer">{formatTime(timeLeft)}</p>
                     </div>
                     <div className="progress-bar-background">
-                        <div className="progress-bar" style={{ width: `${progress}%` }} />
+                    <div className="progress-bar" style={{ width: `${progress}%`, backgroundColor: colors[difficulty]}} />
                     </div>
                     <h2 className="question-prompt">Найдите значение выражения</h2>
                     <h2 className="example">{example}</h2>
@@ -85,7 +90,10 @@ function Example({ difficulty, onBack }) {
                         className="answer-input"
                         placeholder="Введите ответ"
                     />
-                    <button onClick={handleSubmit} className="submit-button">Проверить</button>
+                    <button className="submit-button"
+                        onClick={handleSubmit} style={{ backgroundColor: colors[difficulty], color: "#fff" }}>
+                        Проверить
+                    </button>
                 </div>
             ) : (
                 <div className="result-block">
