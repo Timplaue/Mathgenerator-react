@@ -14,15 +14,15 @@ function DifficultySelection({ onSelectDifficulty }) {
             </div>
             <h2 className="header">• Новый уровень</h2>
             <div className="buttons">
-                <button className="easy" onClick={() => onSelectDifficulty('Легкий')}>
+                <button className="easy" onClick={() => onSelectDifficulty('easy')}>
                     <span className="button-text">Легкий</span>
                     <img src={easy} alt="easy"/>
                 </button>
-                <button className="normal" onClick={() => onSelectDifficulty('Средний')}>
+                <button className="normal" onClick={() => onSelectDifficulty('normal')}>
                     <span className="button-text">Средний</span>
                     <img src={normal} alt="normal"/>
                 </button>
-                <button className="hard" onClick={() => onSelectDifficulty('Сложный')}>
+                <button className="hard" onClick={() => onSelectDifficulty('hard')}>
                     <span className="button-text">Сложный</span>
                     <img src={hard} alt="hard"/>
                 </button>

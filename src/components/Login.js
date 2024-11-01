@@ -3,27 +3,50 @@ import axios from 'axios';
 import "./Login.css";
 import logo from '../assets/logo.svg';
 
-function Login({ onLogin, toggleAuthForm}) {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+function Login({ onLogin, toggleAuthForm }) {
+    const [credentials, setCredentials] = useState({ username: '', password: '' });
+    const [error, setError] = useState('');
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setCredentials((prev) => ({ ...prev, [name]: value }));
+    };
 
     const handleLogin = async () => {
         try {
-            const response = await axios.post('http://localhost:5000/api/login', { username, password });
-            localStorage.setItem('token', response.data.token); // Сохраняем токен
-            onLogin(); // Вызываем callback для переключения на главную часть приложения
+            const response = await axios.post('http://localhost:5000/api/auth/login', credentials);
+            localStorage.setItem('token', response.data.token);
+            onLogin();
         } catch (error) {
-            alert("Error logging in");
+            setError("Ошибка при входе. Проверьте логин и пароль.");
         }
     };
 
     return (
         <div className="block">
-            <img src={logo} alt="Logo" className="login-logo"/>
+            <img src={logo} alt="Logo" className="login-logo" />
             <h1>Добро пожаловать!</h1>
-            <input className="auth" type="text" placeholder="Логин" value={username} onChange={(e) => setUsername(e.target.value)} />
-            <input className="auth" type="password" placeholder="Пароль" value={password} onChange={(e) => setPassword(e.target.value)} />
-            <button className="auth" onClick={handleLogin}>Войти</button>
+            {error && <p className="error-message">{error}</p>}
+            <input
+                className="auth"
+                type="text"
+                name="username"
+                placeholder="Логин"
+                value={credentials.username}
+                onChange={handleChange}
+            />
+            <input
+                className="auth"
+                type="password"
+                name="password"
+                placeholder="Пароль"
+                value={credentials.password}
+                onChange={handleChange}
+                onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
+            />
+            <button className="auth" onClick={handleLogin}>
+                Войти
+            </button>
             <button onClick={toggleAuthForm} className="toggle-button">
                 Регистрация
             </button>

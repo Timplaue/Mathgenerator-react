@@ -108,5 +108,8 @@
 }
 
 .back-button:hover {
-    background-color: rgba(0,0,0,0.25);
+    background-color: rgba(0,0,0,1);
+}
+.result-block h2 {
+    font-size: 1.5rem;
 }
