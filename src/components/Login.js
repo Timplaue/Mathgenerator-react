@@ -18,13 +18,13 @@ function Login({ onLogin, toggleAuthForm }) {
             localStorage.setItem('token', response.data.token);
             onLogin();
         } catch (error) {
-            setError("Ошибка при входе. Проверьте логин и пароль.");
+            setError("Неправильный логин или пароль.");
         }
     };
 
     return (
         <div className="block">
-            <img src={logo} alt="Logo" className="login-logo" />
+            <img src={logo} alt="Logo" className="logo" />
             <h1>Добро пожаловать!</h1>
             {error && <p className="error-message">{error}</p>}
             <input

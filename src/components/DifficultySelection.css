@@ -4,7 +4,7 @@
     margin-right: 10px; /* расстояние между img и h1 */
 }
 
-.block2 {
+.block3 {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -32,7 +32,7 @@ h2.header {
     width: 60%; /* Занимает всю ширину родителя */
     margin: 0; /* Убираем отступы для правильного выравнивания */
 }
-button.block2 {
+button.block3 {
     border: inherit;
     border: 2px solid #000000;
     border-radius: 8px;
@@ -47,7 +47,7 @@ button.block2 {
     font-size: 15px;
 }
 
-.block2 button {
+.block3 button {
     position: relative; /* Устанавливаем позиционирование для кнопки */
     display: flex; /* Используем flex для выравнивания содержимого */
     align-items: flex-start; /* Привязываем содержимое к верхнему краю */
@@ -59,7 +59,7 @@ button.block2 {
     overflow: hidden; /* Скрывает выходящее за пределы содержимое */
 }
 
-.block2 button img {
+.block3 button img {
     position: absolute; /* Позиционируем изображение абсолютно внутри кнопки */
     top: 0; /* Привязываем к верхнему краю */
     right: 0; /* Привязываем к правому краю */

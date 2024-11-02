@@ -1,3 +1,42 @@
+.block2 {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    margin: 10vh auto auto auto;
+    max-width: 400px;
+}
+input.registration {
+    width: 100%;
+    padding: 12px;
+    margin: 5px 0 0 0;
+    border: 2px solid #61C199;
+    border-radius: 8px;
+    background-color: #D0FDEA;
+}
+.left{
+    margin-left: 5%;
+    margin-right: 10%;
+}
+h2 {
+    margin: 15px 0 0 0;
+    font-family: 'Gotham', Arial, sans-serif;
+    font-size: 15px;
+}
+.birthdate-inputs {
+    display: flex;
+    width: 107%;
+    gap: 10px; /* расстояние между input */
+}
+
+.birthdate-inputs input:nth-of-type(1),
+.birthdate-inputs input:nth-of-type(3) {
+    width: 25%;
+}
+
+.birthdate-inputs input:nth-of-type(2) {
+    width: 50%; /* ширина второго input */
+}
 button.registration {
     margin-top: 20px;
     width: 50%;
@@ -9,50 +48,4 @@ button.registration {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s;
-}
-.block3 {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-    max-width: 400px;
-    margin: 10vh auto;
-    padding: 20px;
-}
-.left {
-    text-align: left;
-}
-h1.registration{
-    font-size: 35px;
-    text-align: left;
-}
-input.registration {
-    width: 90%;
-    padding: 12px;
-    margin: 5px 0;
-    border: 2px solid #61C199;
-    border-radius: 8px;
-    background-color: #D0FDEA;
-}
-h2 {
-    margin: 15px 0 0 0;
-    padding: 0;
-    font-family: 'Gotham', Arial, sans-serif;
-    font-size: 15px;
-}
-.birthdate-inputs {
-    display: flex;
-    width: 97%;
-    gap: 10px; /* расстояние между input */
-}
-
-.birthdate-inputs input:nth-of-type(1),
-.birthdate-inputs input:nth-of-type(3) {
-    width: 25%;
-}
-
-.birthdate-inputs input:nth-of-type(2) {
-    width: 50%; /* ширина второго input */
 }

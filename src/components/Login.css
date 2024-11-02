@@ -1,30 +1,15 @@
-/* Центрирование блока авторизации */
 .block {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
+    display: grid;
+    place-items: center;
     width: 100%;
-    max-width: 400px; /* Ограничиваем максимальную ширину блока */
-    margin: 18vh auto;
-    padding: 20px;
+    height: 100%;
+    margin: 20vh auto auto auto;
+    max-width: 450px;
 }
-
-.login-logo {
+.logo {
     width: 150px;
     height: 150px;
-    margin-bottom: 20px;
 }
-
-h1 {
-    font-size: 25px;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
 input.auth {
     width: 70%;
     padding: 12px;
@@ -35,7 +20,6 @@ input.auth {
     background-color: #E0E0E0;
     box-shadow: 5px 5px #61C199;
 }
-
 button.auth {
     margin-top: 20px;
     width: 25%;
@@ -48,7 +32,6 @@ button.auth {
     cursor: pointer;
     transition: background-color 0.3s;
 }
-
 .toggle-button {
     margin-top: 20px;
     background-color: transparent;
@@ -56,9 +39,12 @@ button.auth {
     color: #61C199;
     font-size: 16px;
     cursor: pointer;
-    text-decoration: none;
 }
 
 .toggle-button:hover {
-    color: #45a049;
+    color: #000000;
+}
+.error-message {
+    color: #ED9069;
+    margin-left: 10px;
 }

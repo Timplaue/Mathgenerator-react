@@ -53,7 +53,7 @@ function App() {
         if (currentScreen === 'welcome') {
             const timer = setTimeout(() => {
                 setCurrentScreen('login');
-            }, 3000);
+            }, 2000);
             return () => clearTimeout(timer);
         }
     }, [currentScreen]);

@@ -7,7 +7,7 @@ import hard from '../assets/hard.svg';
 
 function DifficultySelection({ onSelectDifficulty }) {
     return (
-        <div className="block2">
+        <div className="block3">
             <div className="header">
                 <img src={logo} className="difficulty-logo" alt="logo"/>
                 <h1 className="header">Мат <br/>генератор</h1>

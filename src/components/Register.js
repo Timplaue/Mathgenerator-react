@@ -30,7 +30,7 @@ function Register({ onRegister, toggleAuthForm }) {
     };
 
     return (
-        <div className="block3">
+        <div className="block2">
             <div className="left">
                 <h1 className="registration">Регистрация</h1>
                 <h2>Имя</h2>

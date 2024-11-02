@@ -11,11 +11,12 @@
 }
 
 .welcome-screen {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh; /* Занять всю высоту экрана */
-    overflow: hidden; /* Скрыть переполнение */
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    margin: 20vh auto auto auto;
+    max-width: 450px;
 }
 
 .logo {
