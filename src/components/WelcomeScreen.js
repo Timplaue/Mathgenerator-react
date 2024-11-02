@@ -1,11 +1,11 @@
 import React from 'react';
 import './WelcomeScreen.css';
+import logo from '../assets/logo.svg';
 
 function WelcomeScreen() {
     return (
         <div className="welcome-screen">
-            <h1>Добро пожаловать в наше приложение!</h1>
-            <p>Загружаем, пожалуйста, подождите...</p>
+            <img src={logo} className="logo" alt="logo" />
         </div>
     );
 }

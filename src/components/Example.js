@@ -118,7 +118,7 @@ function Example({ difficulty, onBack }) {
                         <div className="progress-bar" style={{ width: `${progress}%`, backgroundColor: colors[difficulty] }} />
                     </div>
                     <h2 className="question-prompt">Найдите значение выражения</h2>
-                    <h2 className="example">{example}</h2>
+                    <h2 className="example">{example} = ?</h2>
                     <label className="answer-label">Ответ:</label>
                     <input
                         value={userAnswer}

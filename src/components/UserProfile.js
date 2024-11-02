@@ -18,7 +18,7 @@ function UserProfile() {
 
             try {
                 const response = await axios.get('http://localhost:5000/api/auth/profile', {
-                    headers: { Authorization: `Bearer ${token}` }
+                    headers: { Authorization: `Bearer ${token}` } // Передаем токен в заголовках
                 });
                 setUserData(response.data);
             } catch (err) {

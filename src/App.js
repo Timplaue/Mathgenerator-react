@@ -5,7 +5,7 @@ import Login from './components/Login';
 import DifficultySelection from './components/DifficultySelection';
 import Example from './components/Example';
 import WelcomeScreen from './components/WelcomeScreen';
-import UserProfile from './components/UserProfile';
+//import NavigationBar from './components/NavigationBar';
 
 function App() {
     const [difficulty, setDifficulty] = useState(null);
@@ -40,25 +40,27 @@ function App() {
     };
 
     useEffect(() => {
-        // Проверка токена при загрузке приложения
         const token = localStorage.getItem('token');
         if (token) {
-            setIsAuthenticated(true); // Если токен найден, пользователь считается аутентифицированным
-            setCurrentScreen('profile');
+            setIsAuthenticated(true);
+            setCurrentScreen('difficulty'); // Измените на 'difficulty' или любой другой экран по умолчанию
         } else {
             setCurrentScreen('welcome');
         }
     }, []);
 
     useEffect(() => {
-        // Таймер для переключения с заставки на экран входа
         if (currentScreen === 'welcome') {
             const timer = setTimeout(() => {
                 setCurrentScreen('login');
-            }, 3000); // 3 секунды для заставки
+            }, 3000);
             return () => clearTimeout(timer);
         }
     }, [currentScreen]);
+
+    const handleHomeClick = () => {
+        setCurrentScreen('home'); // Здесь можно установить экран "Дом"
+    };
 
     return (
         <div className="App">
@@ -80,6 +82,7 @@ function App() {
                     <button onClick={handleLogout}>Выйти</button>
                 </div>
             )}
+            {/*<NavigationBar onHomeClick={handleHomeClick} />*/}
         </div>
     );
 }
