@@ -71,7 +71,7 @@ function Example({ difficulty, onBack }) {
 
     const fetchExample = async () => {
         try {
-            const response = await axios.get(`http://192.168.1.254:5000/api/math/generate?difficulty=${difficulty}`);
+            const response = await axios.get(`http://localhost:5000/api/math/generate?difficulty=${difficulty}`);
             setExample(response.data.example);
         } catch (error) {
             console.error("Error fetching example:", error);

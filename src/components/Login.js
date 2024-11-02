@@ -14,7 +14,7 @@ function Login({ onLogin, toggleAuthForm }) {
 
     const handleLogin = async () => {
         try {
-            const response = await axios.post('http://192.168.1.254:5000/api/auth/login', credentials);
+            const response = await axios.post('http://localhost:5000/api/auth/login', credentials);
             localStorage.setItem('token', response.data.token);
             onLogin();
         } catch (error) {

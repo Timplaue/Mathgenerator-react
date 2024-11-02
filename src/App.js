@@ -5,7 +5,6 @@ import Login from './components/Login';
 import DifficultySelection from './components/DifficultySelection';
 import Example from './components/Example';
 import WelcomeScreen from './components/WelcomeScreen';
-//import NavigationBar from './components/NavigationBar';
 
 function App() {
     const [difficulty, setDifficulty] = useState(null);
@@ -58,10 +57,6 @@ function App() {
         }
     }, [currentScreen]);
 
-    const handleHomeClick = () => {
-        setCurrentScreen('home'); // Здесь можно установить экран "Дом"
-    };
-
     return (
         <div className="App">
             {!isAuthenticated ? (
@@ -82,7 +77,6 @@ function App() {
                     <button onClick={handleLogout}>Выйти</button>
                 </div>
             )}
-            {/*<NavigationBar onHomeClick={handleHomeClick} />*/}
         </div>
     );
 }
