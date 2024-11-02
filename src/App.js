@@ -5,6 +5,7 @@ import Login from './components/Login';
 import DifficultySelection from './components/DifficultySelection';
 import Example from './components/Example';
 import WelcomeScreen from './components/WelcomeScreen';
+import Profile from './components/Profile';
 
 function App() {
     const [difficulty, setDifficulty] = useState(null);
@@ -18,11 +19,15 @@ function App() {
 
     const handleLogin = () => {
         setIsAuthenticated(true);
-        localStorage.setItem('token', 'user_token'); // Здесь сохраняется токен
+        setCurrentScreen('difficulty'); // Перенаправление на экран выбора сложности
+        // В этом месте вы будете сохранять реальный токен, полученный с сервера
+        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MjYzMjE0NzUxMWY3MTRjYzc1OWIzMSIsImlhdCI6MTczMDU1OTUzMywiZXhwIjoxNzMwNTYzMTMzfQ.nNH_J8WYw6a6GRhfyFbhj9YjifxJ5Bfh8mieS6rTLx4';
+        localStorage.setItem('token', token); // Здесь сохраняется токен
     };
 
     const handleLogout = () => {
         setIsAuthenticated(false);
+        setCurrentScreen('welcome'); // Вернуться к экрану приветствия
         localStorage.removeItem('token'); // Удаляем токен при выходе
     };
 
@@ -42,7 +47,7 @@ function App() {
         const token = localStorage.getItem('token');
         if (token) {
             setIsAuthenticated(true);
-            setCurrentScreen('difficulty'); // Измените на 'difficulty' или любой другой экран по умолчанию
+            setCurrentScreen('difficulty'); // Перенаправление на экран выбора сложности
         } else {
             setCurrentScreen('welcome');
         }
@@ -69,6 +74,7 @@ function App() {
                 )
             ) : (
                 <div>
+                    <Profile /> {/* Вставляем компонент профиля */}
                     {difficulty ? (
                         <Example difficulty={difficulty} onBack={handleBackToDifficultySelection} />
                     ) : (

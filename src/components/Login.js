@@ -13,12 +13,20 @@ function Login({ onLogin, toggleAuthForm }) {
     };
 
     const handleLogin = async () => {
+        setError(''); // Сбрасываем ошибки перед попыткой входа
         try {
             const response = await axios.post('http://localhost:5000/api/auth/login', credentials);
-            localStorage.setItem('token', response.data.token);
-            onLogin();
+            const token = response.data.token; // Предполагая, что токен находится в response.data.token
+            if (token) {
+                localStorage.setItem('token', token); // Сохранение токена в localStorage
+                console.log('Токен при входе:', token);
+                onLogin(); // Вызываем onLogin для обновления состояния аутентификации в родительском компоненте
+            } else {
+                setError('Не удалось получить токен'); // Обработка случая, если токен не возвращается
+            }
         } catch (error) {
-            setError("Неправильный логин или пароль.");
+            console.error("Ошибка при входе:", error);
+            setError('Неправильный логин или пароль'); // Установка ошибки для отображения
         }
     };
 
