@@ -1,19 +1,10 @@
-.difficulty-logo {
-    width: 100px;
-    height: 100px;
-    margin-right: 10px; /* расстояние между img и h1 */
-}
-
 .block3 {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
+    display: grid;
+    place-items: center;
     width: 100%;
-    max-width: 400px;
-    margin: 10vh auto;
-    padding: 20px;
+    height: 100%;
+    margin: 10vh auto auto auto;
+    max-width: 450px;
 }
 
 .header {
@@ -21,6 +12,12 @@
     align-items: center; /* выравнивает img и h1 по вертикали */
     margin-bottom: 20px; /* отступ под img и h1 */
 }
+.difficulty-logo {
+    width: 100px;
+    height: 100px;
+    margin-right: 10px; /* расстояние между img и h1 */
+}
+
 h1.header {
     font-size: 20px;
     text-align: left;

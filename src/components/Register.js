@@ -15,7 +15,7 @@ function Register({ onRegister, toggleAuthForm }) {
 
         try {
             console.log("Registering user:", { firstName, lastName, formattedBirthDate, username, password }); // Лог отправляемых данных
-            await axios.post('http://localhost:5000/api/auth/register', {
+            await axios.post('http://http://192.168.1.254:5000/api/auth/register', {
                 firstName,
                 lastName,
                 birthDate: formattedBirthDate,
