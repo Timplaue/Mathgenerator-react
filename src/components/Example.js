@@ -31,14 +31,40 @@ function Example({ difficulty, onBack, settings }) {
 
     const fetchExample = async () => {
         try {
+            let min, max;
+            // Устанавливаем диапазоны чисел в зависимости от сложности
+            switch (difficulty) {
+                case 'easy':
+                    min = 0;
+                    max = 9;
+                    break;
+                case 'normal':
+                    min = 0;
+                    max = 99;
+                    break;
+                case 'hard':
+                    min = 10;
+                    max = 99;
+                    break;
+                default:
+                    throw new Error('Неверная сложность');
+            }
+
             const response = await axios.get(`http://localhost:5000/api/math/generate`, {
                 params: {
                     difficulty,
                     count: settings.count,
-                    operations: settings.operations.join(',')
+                    operations: settings.operations.join(','),
+                    min, // передаем min
+                    max  // передаем max
                 }
             });
-            setExample(response.data.example);
+
+            if (response.data && response.data.example) {
+                setExample(response.data.example);
+            } else {
+                console.error("Неправильный ответ от сервера:", response.data);
+            }
         } catch (error) {
             console.error("Ошибка при получении примера:", error);
         }
@@ -55,14 +81,18 @@ function Example({ difficulty, onBack, settings }) {
     };
 
     const handleSubmit = async () => {
-        const correctAnswer = eval(example);
+        const correctAnswer = eval(example); // Важно: использование eval может быть небезопасным
         if (parseInt(userAnswer) === correctAnswer) {
             setCorrectCount(correctCount + 1);
             await updateStatistics({ examplesSolved: 1 });
         }
         setQuestionCount(questionCount + 1);
         setUserAnswer('');
-        questionCount + 1 < 10 ? fetchExample() : await handleEndOfLevel();
+        if (questionCount + 1 < 10) {
+            fetchExample();
+        } else {
+            await handleEndOfLevel();
+        }
     };
 
     const handleEndOfLevel = async () => {
@@ -76,7 +106,7 @@ function Example({ difficulty, onBack, settings }) {
 
     useEffect(() => {
         fetchExample();
-    }, []);
+    }, [difficulty, settings]); // Добавил зависимость от difficulty и settings
 
     useEffect(() => {
         const timer = timeLeft > 0 && setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
