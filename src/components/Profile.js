@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import AvatarUpload from './AvatarUpload';
+import './Profile.css';
+import logo from "../assets/logo.svg";
 
 function Profile({ onLogout }) {
     const [profileData, setProfileData] = useState(null);
@@ -40,21 +42,45 @@ function Profile({ onLogout }) {
     }, []);
 
     return (
-        <div>
+        <div className="block3">
             {error && <p>{error}</p>}
             {profileData && (
-                <div>
-                    <h1>Профиль пользователя</h1>
-                    <img src={avatar} alt="Аватар" style={{ width: '100px', height: '100px' }} />
-                    <p>Имя: {profileData.firstName}</p>
-                    <p>Фамилия: {profileData.lastName}</p>
-                    <p>Дата рождения: {profileData.birthDate}</p>
-                    <p>Логин: {profileData.username}</p>
-                    <p>Решено примеров: {profileData.statistics?.examplesSolved || 0}</p>
-                    <p>Пройдено уровней: {profileData.statistics?.levelsCompleted || 0}</p>
-                    <p>Уровней с 10 из 10: {profileData.statistics?.perfectScores || 0}</p>
-                    <AvatarUpload onAvatarUpload={handleAvatarUpload} />
-                    <button onClick={onLogout}>Выйти</button>
+                <div className="profile">
+                    <div className="difficulty-header">
+                        <img src={logo} className="difficulty-logo" alt="logo"/>
+                        <h1 className="difficulty-header">Мат <br/>генератор</h1>
+                    </div>
+                    <h3>• Мой аккаунт</h3>
+                    <div className="profile-container">
+                        <img src={avatar} alt="Аватар" className="avatar"/>
+                        <div className="profile-info">
+                            <h2>{profileData.firstName}</h2>
+                            <h2>{profileData.lastName}</h2>
+                            <p>Создан: {new Date(profileData.registrationDate).toLocaleDateString()}</p>
+                            <AvatarUpload onAvatarUpload={handleAvatarUpload}/>
+                        </div>
+                    </div>
+                    <h5>Логин: {profileData.username}</h5>
+                    <h5>Дата рождения: {profileData.birthDate ? new Date(profileData.birthDate).toLocaleDateString('ru-RU'):"Не указана"}</h5>
+                    <h3>• Статистика</h3>
+                    <div className="grid">
+                        <div className="statistic">
+                            <h4>{profileData.statistics?.examplesSolved || 0}<span
+                                style={{color: "#434343", fontSize: "0.8em"}}> примеров решено</span></h4>
+                        </div>
+                        <div className="statistic">
+                            <h4>{profileData.statistics?.levelsCompleted || 0}<span style={{color: "#434343", fontSize: "0.8em"}}> уровней пройдено</span></h4>
+                        </div>
+                        <div className="statistic">
+                            <h4>{profileData.statistics?.perfectScores || 0}<span
+                                style={{color: "#434343", fontSize: "0.8em"}}> уровней на 10/10</span></h4>
+                        </div>
+                        <div className="statistic">
+                            <h4>{profileData.statistics?.perfectScores || 0}<span
+                                style={{color: "#434343", fontSize: "0.8em"}}> уровней на 10/10</span></h4>
+                        </div>
+                    </div>
+                    <button className="logout" onClick={onLogout}>Выйти</button>
                 </div>
             )}
         </div>

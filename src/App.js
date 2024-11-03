@@ -6,24 +6,31 @@ import DifficultySelection from './components/DifficultySelection';
 import Example from './components/Example';
 import WelcomeScreen from './components/WelcomeScreen';
 import Profile from './components/Profile';
-import NavMenu from './components/NavMenu'; // Импортируйте NavMenu
-import { jwtDecode } from 'jwt-decode'; // Исправленный импорт
+import Settings from './components/Settings';
+import NavMenu from './components/NavMenu';
+import {jwtDecode} from 'jwt-decode'; // исправлено импортирование
 
 function App() {
     const [difficulty, setDifficulty] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isRegistering, setIsRegistering] = useState(false);
     const [currentScreen, setCurrentScreen] = useState('welcome');
+    const [settings, setSettings] = useState({ count: 2, operations: ['+', '-', '*', '/'] });
 
     const handleSelectDifficulty = (level) => {
         setDifficulty(level);
-        setCurrentScreen('example'); // Переход к примеру при выборе сложности
+        setCurrentScreen('example');
+    };
+
+    const handleSaveSettings = (newSettings) => {
+        setSettings(newSettings);
+        setCurrentScreen('difficulty'); // Изменено с 'profile' на 'difficulty'
     };
 
     const handleLogin = (token) => {
         setIsAuthenticated(true);
-        localStorage.setItem('token', token); // Сохраняем реальный токен
-        setCurrentScreen('difficulty'); // Начнем с экрана выбора сложности
+        localStorage.setItem('token', token);
+        setCurrentScreen('difficulty');
     };
 
     const handleLogout = () => {
@@ -42,14 +49,14 @@ function App() {
 
     const isTokenExpired = (token) => {
         if (!token) return true;
-        const decoded = jwtDecode(token); // Используем jwtDecode
-        return decoded.exp * 1000 < Date.now(); // Проверяем, истек ли токен
+        const decoded = jwtDecode(token);
+        return decoded.exp * 1000 < Date.now();
     };
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (isTokenExpired(token)) {
-            handleLogout(); // Если токен истек, выходим
+            handleLogout();
         } else if (token) {
             setIsAuthenticated(true);
             setCurrentScreen('difficulty');
@@ -80,11 +87,17 @@ function App() {
                     {currentScreen === 'profile' ? (
                         <Profile onLogout={handleLogout} />
                     ) : currentScreen === 'example' ? (
-                        <Example difficulty={difficulty} onBack={() => navigateTo('difficulty')} />
+                        <Example
+                            difficulty={difficulty}
+                            settings={settings} // передаем settings в Example
+                            onBack={() => navigateTo('difficulty')}
+                        />
+                    ) : currentScreen === 'settings' ? (
+                        <Settings onSaveSettings={handleSaveSettings} onBack={() => navigateTo('profile')} />
                     ) : (
                         <DifficultySelection onSelectDifficulty={handleSelectDifficulty} />
                     )}
-                    <NavMenu onNavigate={navigateTo} /> {/* Добавьте NavMenu здесь */}
+                    <NavMenu onNavigate={navigateTo} />
                 </div>
             )}
         </div>

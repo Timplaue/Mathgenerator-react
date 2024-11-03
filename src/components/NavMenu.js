@@ -6,6 +6,7 @@ function NavMenu({ onNavigate }) {
         <div className="nav-menu">
             <button onClick={() => onNavigate('profile')}>Профиль</button>
             <button onClick={() => onNavigate('difficulty')}>Выбор сложности</button>
+            <button onClick={() => onNavigate('settings')}>Настройки</button> {/* Добавленная кнопка */}
         </div>
     );
 }

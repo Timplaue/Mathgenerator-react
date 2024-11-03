@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "./Example.css";
 import logo from '../assets/logo.svg';
-
-// Импорт всех возможных SVG-файлов
 import goodResultEasy from '../assets/result/good-result-easy.svg';
 import normalResultEasy from '../assets/result/normal-result-easy.svg';
 import badResultEasy from '../assets/result/bad-result-easy.svg';
@@ -14,7 +12,7 @@ import goodResultHard from '../assets/result/good-result-hard.svg';
 import normalResultHard from '../assets/result/normal-result-hard.svg';
 import badResultHard from '../assets/result/bad-result-hard.svg';
 
-function Example({ difficulty, onBack }) {
+function Example({ difficulty, onBack, settings }) {
     const [example, setExample] = useState('');
     const [userAnswer, setUserAnswer] = useState('');
     const [correctCount, setCorrectCount] = useState(0);
@@ -22,58 +20,37 @@ function Example({ difficulty, onBack }) {
     const [timeLeft, setTimeLeft] = useState(120);
     const [progress, setProgress] = useState(0);
 
-    const colors = {
-        easy: "#61C199",
-        normal: "#E9CB30",
-        hard: "#ED9069"
-    };
-
+    const colors = { easy: "#61C199", normal: "#E9CB30", hard: "#ED9069" };
     const resultImages = {
-        easy: {
-            good: goodResultEasy,
-            normal: normalResultEasy,
-            bad: badResultEasy
-        },
-        normal: {
-            good: goodResultNormal,
-            normal: normalResultNormal,
-            bad: badResultNormal
-        },
-        hard: {
-            good: goodResultHard,
-            normal: normalResultHard,
-            bad: badResultHard
-        }
+        easy: { good: goodResultEasy, normal: normalResultEasy, bad: badResultEasy },
+        normal: { good: goodResultNormal, normal: normalResultNormal, bad: badResultNormal },
+        hard: { good: goodResultHard, normal: normalResultHard, bad: badResultHard }
     };
 
-    useEffect(() => {
-        fetchExample();
-    }, []);
-
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setTimeLeft((prevTime) => prevTime > 0 ? prevTime - 1 : 0);
-            if (timeLeft <= 0) clearInterval(timer);
-        }, 1000);
-        return () => clearInterval(timer);
-    }, [timeLeft]);
-
-    useEffect(() => {
-        setProgress((questionCount / 10) * 100);
-    }, [questionCount]);
-
-    const formatTime = (seconds) => {
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = seconds % 60;
-        return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
-    };
+    const formatTime = (seconds) => `${Math.floor(seconds / 60)}:${seconds % 60 < 10 ? '0' : ''}${seconds % 60}`;
 
     const fetchExample = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/math/generate?difficulty=${difficulty}`);
+            const response = await axios.get(`http://localhost:5000/api/math/generate`, {
+                params: {
+                    difficulty,
+                    count: settings.count,
+                    operations: settings.operations.join(',')
+                }
+            });
             setExample(response.data.example);
         } catch (error) {
             console.error("Ошибка при получении примера:", error);
+        }
+    };
+
+    const updateStatistics = async (data) => {
+        try {
+            await axios.post('http://localhost:5000/api/auth/update-statistics', data, {
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+            });
+        } catch (error) {
+            console.error("Ошибка при обновлении статистики:", error);
         }
     };
 
@@ -81,47 +58,34 @@ function Example({ difficulty, onBack }) {
         const correctAnswer = eval(example);
         if (parseInt(userAnswer) === correctAnswer) {
             setCorrectCount(correctCount + 1);
-            // Увеличиваем счетчик решённых примеров
             await updateStatistics({ examplesSolved: 1 });
         }
         setQuestionCount(questionCount + 1);
         setUserAnswer('');
-
-        if (questionCount + 1 < 10) {
-            fetchExample();
-        } else {
-            // Увеличиваем счетчик уровней, если все 10 вопросов решены
-            if (correctCount === 9) {
-                await updateStatistics({ levelsCompleted: 1, perfectScores: 1 });
-            } else if (correctCount >= 5) {
-                await updateStatistics({ levelsCompleted: 1 });
-            }
-        }
+        questionCount + 1 < 10 ? fetchExample() : await handleEndOfLevel();
     };
 
-    const updateStatistics = async (data) => {
-        try {
-            await axios.post('http://localhost:5000/api/auth/update-statistics', data, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-            });
-        } catch (error) {
-            console.error("Ошибка при обновлении статистики:", error);
-        }
+    const handleEndOfLevel = async () => {
+        const stats = correctCount >= 5 ? { levelsCompleted: 1, ...(correctCount === 9 && { perfectScores: 1 }) } : {};
+        await updateStatistics(stats);
     };
 
-    const getResultMessage = () => {
-        if (correctCount === 10 || correctCount === 9) return "Все правильно, молодец!";
-        if (correctCount >= 5) return "Так держать!";
-        return "Могло быть и лучше.";
-    };
+    const getResultMessage = () => (correctCount >= 9 ? "Все правильно, молодец!" : correctCount >= 5 ? "Так держать!" : "Могло быть и лучше.");
 
-    const getResultImage = () => {
-        const resultType = correctCount === 10 || correctCount === 9 ? 'good' :
-            correctCount >= 5 ? 'normal' : 'bad';
-        return resultImages[difficulty.toLowerCase()][resultType];
-    };
+    const getResultImage = () => resultImages[difficulty.toLowerCase()][correctCount >= 9 ? 'good' : correctCount >= 5 ? 'normal' : 'bad'];
+
+    useEffect(() => {
+        fetchExample();
+    }, []);
+
+    useEffect(() => {
+        const timer = timeLeft > 0 && setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
+        return () => clearInterval(timer);
+    }, [timeLeft]);
+
+    useEffect(() => {
+        setProgress((questionCount / 10) * 100);
+    }, [questionCount]);
 
     return (
         <div className="block">
@@ -146,11 +110,7 @@ function Example({ difficulty, onBack }) {
                         className="answer-input"
                         placeholder="Введите ответ"
                     />
-                    <button
-                        onClick={handleSubmit}
-                        className="submit-button"
-                        style={{ backgroundColor: colors[difficulty], color: "#fff" }}
-                    >
+                    <button onClick={handleSubmit} className="submit-button" style={{ backgroundColor: colors[difficulty], color: "#fff" }}>
                         Проверить
                     </button>
                 </div>
@@ -160,7 +120,9 @@ function Example({ difficulty, onBack }) {
                     <h2>{getResultMessage()}</h2>
                     <img src={getResultImage()} alt="result" className="result-image"/>
                     <p>Количество правильных ответов: {correctCount} из 10</p>
-                    <button style={{backgroundColor: colors[difficulty], color: "#fff"}} onClick={onBack} className="back-button">Вернуться к выбору сложности</button>
+                    <button style={{ backgroundColor: colors[difficulty], color: "#fff" }} onClick={onBack} className="back-button">
+                        Вернуться к выбору сложности
+                    </button>
                 </div>
             )}
         </div>

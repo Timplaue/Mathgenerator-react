@@ -44,7 +44,7 @@ button.block3 {
     font-size: 15px;
 }
 
-.block3 button {
+.buttons button {
     position: relative; /* Устанавливаем позиционирование для кнопки */
     display: flex; /* Используем flex для выравнивания содержимого */
     align-items: flex-start; /* Привязываем содержимое к верхнему краю */
