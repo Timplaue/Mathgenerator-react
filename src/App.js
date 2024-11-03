@@ -6,6 +6,7 @@ import DifficultySelection from './components/DifficultySelection';
 import Example from './components/Example';
 import WelcomeScreen from './components/WelcomeScreen';
 import Profile from './components/Profile';
+import NavMenu from './components/NavMenu'; // Импортируйте NavMenu
 
 function App() {
     const [difficulty, setDifficulty] = useState(null);
@@ -13,12 +14,15 @@ function App() {
     const [isRegistering, setIsRegistering] = useState(false);
     const [currentScreen, setCurrentScreen] = useState('welcome');
 
-    const handleSelectDifficulty = (level) => setDifficulty(level);
+    const handleSelectDifficulty = (level) => {
+        setDifficulty(level);
+        setCurrentScreen('example'); // Переход к примеру при выборе сложности
+    };
 
     const handleLogin = (token) => {
         setIsAuthenticated(true);
-        setCurrentScreen('difficulty');
         localStorage.setItem('token', token); // Сохраняем реальный токен
+        setCurrentScreen('difficulty'); // Начнем с экрана выбора сложности
     };
 
     const handleLogout = () => {
@@ -31,7 +35,9 @@ function App() {
 
     const toggleRegister = () => setIsRegistering(!isRegistering);
 
-    const handleBackToDifficultySelection = () => setDifficulty(null);
+    const navigateTo = (screen) => {
+        setCurrentScreen(screen);
+    };
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -62,13 +68,14 @@ function App() {
                 )
             ) : (
                 <div>
-                    <Profile />
-                    {difficulty ? (
-                        <Example difficulty={difficulty} onBack={handleBackToDifficultySelection} />
+                    {currentScreen === 'profile' ? (
+                        <Profile onLogout={handleLogout} />
+                    ) : currentScreen === 'example' ? (
+                        <Example difficulty={difficulty} onBack={() => navigateTo('difficulty')} />
                     ) : (
                         <DifficultySelection onSelectDifficulty={handleSelectDifficulty} />
                     )}
-                    <button onClick={handleLogout}>Выйти</button>
+                    <NavMenu onNavigate={navigateTo} /> {/* Добавьте NavMenu здесь */}
                 </div>
             )}
         </div>

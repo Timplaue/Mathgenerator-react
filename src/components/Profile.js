@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './Profile.css';
+import logo from "../assets/logo.svg";
 
-function Profile() {
+function Profile({ onLogout }) { // Добавьте onLogout как пропс
     const [profileData, setProfileData] = useState(null);
     const [error, setError] = useState('');
 
@@ -12,7 +14,7 @@ function Profile() {
         try {
             const response = await axios.get('http://localhost:5000/api/auth/profile', {
                 headers: {
-                    Authorization: `Bearer ${token}`, // Проверяем, что используется Bearer <token>
+                    Authorization: `Bearer ${token}`,
                 },
             });
             setProfileData(response.data);
@@ -27,15 +29,21 @@ function Profile() {
     }, []);
 
     return (
-        <div>
+        <div className="block3">
             {error && <p>{error}</p>}
             {profileData && (
                 <div>
+                    <div className="header">
+                        <img src={logo} className="difficulty-logo" alt="logo"/>
+                        <h1 className="header">Мат <br/>генератор</h1>
+                    </div>
                     <h1>Профиль пользователя</h1>
                     <p>Имя: {profileData.firstName}</p>
                     <p>Фамилия: {profileData.lastName}</p>
                     <p>Дата рождения: {profileData.birthDate}</p>
                     <p>Логин: {profileData.username}</p>
+                    <button onClick={onLogout}>Выйти</button>
+                    {/* Кнопка "Выйти" здесь */}
                 </div>
             )}
         </div>

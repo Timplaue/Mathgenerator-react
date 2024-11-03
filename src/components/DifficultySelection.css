@@ -7,7 +7,7 @@
     max-width: 450px;
 }
 
-.header {
+.difficulty-header {
     display: flex;
     align-items: center; /* выравнивает img и h1 по вертикали */
     margin-bottom: 20px; /* отступ под img и h1 */
@@ -18,15 +18,15 @@
     margin-right: 10px; /* расстояние между img и h1 */
 }
 
-h1.header {
-    font-size: 20px;
+h1.difficulty-header {
+    font-size: 25px;
     text-align: left;
     font-weight: bold;
 }
-h2.header {
+h2.difficulty-header {
     text-align: left; /* Выравнивание текста по левому краю */
     font-weight: bold; /* Жирный текст */
-    width: 60%; /* Занимает всю ширину родителя */
+    width: 55%; /* Занимает всю ширину родителя */
     margin: 0; /* Убираем отступы для правильного выравнивания */
 }
 button.block3 {

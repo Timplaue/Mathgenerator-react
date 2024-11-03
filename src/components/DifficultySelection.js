@@ -8,11 +8,11 @@ import hard from '../assets/hard.svg';
 function DifficultySelection({ onSelectDifficulty }) {
     return (
         <div className="block3">
-            <div className="header">
+            <div className="difficulty-header">
                 <img src={logo} className="difficulty-logo" alt="logo"/>
-                <h1 className="header">Мат <br/>генератор</h1>
+                <h1 className="difficulty-header">Мат <br/>генератор</h1>
             </div>
-            <h2 className="header">• Новый уровень</h2>
+            <h2 className="difficulty-header">• Новый уровень</h2>
             <div className="buttons">
                 <button className="easy" onClick={() => onSelectDifficulty('easy')}>
                     <span className="button-text">Легкий</span>
