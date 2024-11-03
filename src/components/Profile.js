@@ -6,13 +6,13 @@ function Profile() {
     const [error, setError] = useState('');
 
     const fetchProfile = async () => {
-        const token = localStorage.getItem('token'); // Получаем токен из localStorage
-        console.log('Текущий токен:', token); // Лог текущего токена
+        const token = localStorage.getItem('token');
+        console.log('Текущий токен:', token);
 
         try {
             const response = await axios.get('http://localhost:5000/api/auth/profile', {
                 headers: {
-                    Authorization: `Bearer ${token}`, // Используем токен для авторизации
+                    Authorization: `Bearer ${token}`, // Проверяем, что используется Bearer <token>
                 },
             });
             setProfileData(response.data);
