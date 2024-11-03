@@ -17,12 +17,18 @@ function Profile({ onLogout }) {
                 },
             });
             setProfileData(response.data);
-            setAvatar(response.data.avatarUrl || localStorage.getItem('avatarUrl')); // Загружайте из localStorage
+            setAvatar(response.data.avatarUrl || localStorage.getItem('avatarUrl'));
         } catch (error) {
-            console.error("Ошибка при получении профиля:", error);
-            setError("Ошибка при получении профиля");
+            if (error.response && error.response.status === 401) {
+                // Токен истек, выходим из профиля
+                onLogout();
+            } else {
+                console.error("Ошибка при получении профиля:", error);
+                setError("Ошибка при получении профиля");
+            }
         }
     };
+
 
     const handleAvatarUpload = (newAvatarUrl) => {
         setAvatar(newAvatarUrl);
@@ -44,6 +50,9 @@ function Profile({ onLogout }) {
                     <p>Фамилия: {profileData.lastName}</p>
                     <p>Дата рождения: {profileData.birthDate}</p>
                     <p>Логин: {profileData.username}</p>
+                    <p>Решено примеров: {profileData.statistics?.examplesSolved || 0}</p>
+                    <p>Пройдено уровней: {profileData.statistics?.levelsCompleted || 0}</p>
+                    <p>Уровней с 10 из 10: {profileData.statistics?.perfectScores || 0}</p>
                     <AvatarUpload onAvatarUpload={handleAvatarUpload} />
                     <button onClick={onLogout}>Выйти</button>
                 </div>

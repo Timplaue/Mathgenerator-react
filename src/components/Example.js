@@ -28,7 +28,6 @@ function Example({ difficulty, onBack }) {
         hard: "#ED9069"
     };
 
-    // Объект с изображениями
     const resultImages = {
         easy: {
             good: goodResultEasy,
@@ -74,20 +73,41 @@ function Example({ difficulty, onBack }) {
             const response = await axios.get(`http://localhost:5000/api/math/generate?difficulty=${difficulty}`);
             setExample(response.data.example);
         } catch (error) {
-            console.error("Error fetching example:", error);
+            console.error("Ошибка при получении примера:", error);
         }
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const correctAnswer = eval(example);
         if (parseInt(userAnswer) === correctAnswer) {
             setCorrectCount(correctCount + 1);
+            // Увеличиваем счетчик решённых примеров
+            await updateStatistics({ examplesSolved: 1 });
         }
         setQuestionCount(questionCount + 1);
         setUserAnswer('');
 
         if (questionCount + 1 < 10) {
             fetchExample();
+        } else {
+            // Увеличиваем счетчик уровней, если все 10 вопросов решены
+            if (correctCount === 9) {
+                await updateStatistics({ levelsCompleted: 1, perfectScores: 1 });
+            } else if (correctCount >= 5) {
+                await updateStatistics({ levelsCompleted: 1 });
+            }
+        }
+    };
+
+    const updateStatistics = async (data) => {
+        try {
+            await axios.post('http://localhost:5000/api/auth/update-statistics', data, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+        } catch (error) {
+            console.error("Ошибка при обновлении статистики:", error);
         }
     };
 

@@ -7,6 +7,7 @@ import Example from './components/Example';
 import WelcomeScreen from './components/WelcomeScreen';
 import Profile from './components/Profile';
 import NavMenu from './components/NavMenu'; // Импортируйте NavMenu
+import { jwtDecode } from 'jwt-decode'; // Исправленный импорт
 
 function App() {
     const [difficulty, setDifficulty] = useState(null);
@@ -39,9 +40,17 @@ function App() {
         setCurrentScreen(screen);
     };
 
+    const isTokenExpired = (token) => {
+        if (!token) return true;
+        const decoded = jwtDecode(token); // Используем jwtDecode
+        return decoded.exp * 1000 < Date.now(); // Проверяем, истек ли токен
+    };
+
     useEffect(() => {
         const token = localStorage.getItem('token');
-        if (token) {
+        if (isTokenExpired(token)) {
+            handleLogout(); // Если токен истек, выходим
+        } else if (token) {
             setIsAuthenticated(true);
             setCurrentScreen('difficulty');
         } else {
