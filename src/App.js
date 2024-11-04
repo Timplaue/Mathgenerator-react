@@ -28,7 +28,7 @@ function App() {
     };
 
     const handleTimeChange = (newTime) => {
-        setSettings((prev) => ({ ...prev, timeLimit: newTime })); // Обновляем только время
+        setSettings((prev) => ({ ...prev, timeLimit: newTime }));
     };
 
     const handleLogin = (token) => {
@@ -99,9 +99,9 @@ function App() {
                     ) : currentScreen === 'settings' ? (
                         <Settings
                             onSaveSettings={handleSaveSettings}
-                            onBack={() => navigateTo('profile')}
-                            initialTime={settings.timeLimit} // передаем текущее время
-                            onTimeChange={handleTimeChange} // передаем функцию изменения времени
+                            onBack={() => navigateTo('difficulty')} // изменено на переход в выбор сложности
+                            initialTime={settings.timeLimit}
+                            onTimeChange={handleTimeChange}
                         />
                     ) : (
                         <DifficultySelection onSelectDifficulty={handleSelectDifficulty} />

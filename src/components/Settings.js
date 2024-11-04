@@ -36,43 +36,54 @@ function Settings({ onSaveSettings, onBack, initialTime, onTimeChange }) {
 
     return (
         <div className="settings-block">
-            <h2>Настройки примеров</h2>
-            <label>
-                Количество чисел:
-                <input
-                    type="number"
-                    min="2"
-                    value={count}
-                    onChange={handleCountChange}
-                />
-            </label>
+            <div className="">
+                <h2>Настройки примеров</h2>
 
-            <div>
-                <h3>Выберите операции:</h3>
-                {['+', '-', '*', '/'].map((operation) => (
-                    <label key={operation}>
+                <div className="setting-item">
+                    <label>
+                        Количество чисел:
                         <input
-                            type="checkbox"
-                            checked={selectedOperations[operation]}
-                            onChange={() => handleOperationChange(operation)}
+                            type="number"
+                            min="2"
+                            value={count}
+                            onChange={handleCountChange}
                         />
-                        {operation}
                     </label>
-                ))}
+                </div>
+
+                <div className="setting-item">
+                    <h3>Выберите операции:</h3>
+                    <div className="operations">
+                        {['+', '-', '*', '/'].map((operation) => (
+                            <label key={operation} className="operation-label">
+                                <input
+                                    type="checkbox"
+                                    checked={selectedOperations[operation]}
+                                    onChange={() => handleOperationChange(operation)}
+                                />
+                                {operation}
+                            </label>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="setting-item">
+                    <label>
+                        Время на решение (в секундах):
+                        <input
+                            type="number"
+                            min="10"
+                            value={timeLimit}
+                            onChange={handleTimeChange}
+                        />
+                    </label>
+                </div>
+
+                <div className="button-group">
+                    <button onClick={handleSave}>Сохранить</button>
+                    <button onClick={onBack}>Назад</button>
+                </div>
             </div>
-
-            <label>
-                Время на решение (в секундах):
-                <input
-                    type="number"
-                    min="10"
-                    value={timeLimit} // Используем состояние timeLimit
-                    onChange={handleTimeChange}
-                />
-            </label>
-
-            <button className="logout" onClick={handleSave}>Сохранить</button>
-            <button onClick={onBack}>Назад</button>
         </div>
     );
 }

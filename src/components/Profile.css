@@ -22,7 +22,7 @@
     width: 100%;
     height: 100%;
     margin: 10vh auto auto auto;
-    max-width: 450px;
+    max-width: 400px;
 }
 .profile h2 {
     font-size: 20px;
@@ -64,7 +64,11 @@
     padding: 20px; /* Внутренние отступы */
     text-align: center; /* Центрирование текста */
     max-height: 10px; /* Минимальная высота для одинакового размера */
+    max-width: auto;
     display: flex;
     align-items: center; /* Вертикальное центрирование содержимого */
     justify-content: center; /* Горизонтальное центрирование содержимого */
+}
+.profile {
+    margin-left: 5%;
 }

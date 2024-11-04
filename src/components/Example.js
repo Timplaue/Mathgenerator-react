@@ -32,14 +32,11 @@ function Example({ difficulty, onBack, settings }) {
 
     const fetchExample = async () => {
         try {
-            const { min, max } = getDifficultyRange(difficulty);
             const response = await axios.get(`http://localhost:5000/api/math/generate`, {
                 params: {
                     difficulty,
                     count: settings.count,
-                    operations: settings.operations.join(','),
-                    min,
-                    max
+                    operations: settings.operations.join(',')
                 }
             });
             if (response.data?.example) {
@@ -49,15 +46,6 @@ function Example({ difficulty, onBack, settings }) {
             }
         } catch (error) {
             console.error("Ошибка при получении примера:", error);
-        }
-    };
-
-    const getDifficultyRange = (difficulty) => {
-        switch (difficulty) {
-            case 'easy': return { min: 0, max: 9 };
-            case 'normal': return { min: 0, max: 99 };
-            case 'hard': return { min: 10, max: 99 };
-            default: throw new Error('Неверная сложность');
         }
     };
 
@@ -124,33 +112,35 @@ function Example({ difficulty, onBack, settings }) {
     }, [questionCount]);
 
     return (
-        <div className="block">
+        <div>
             {timeLeft > 0 && questionCount < 10 ? (
-                <div className="example-block">
-                    <img src={logo} alt="logo" className="example-logo" />
-                    <div className="header">
-                        <h2 style={{ color: colors[difficulty] }}>
-                            <span style={{ color: 'black' }}>Уровень</span> {difficulty}
-                        </h2>
-                        <p className="timer">{formatTime(timeLeft)}</p>
+                <div className="block">
+                    <div className="example-block">
+                        <img src={logo} alt="logo" className="example-logo" />
+                        <div className="header">
+                            <h2 style={{ color: colors[difficulty] }}>
+                                <span style={{ color: 'black' }}>Уровень</span> {difficulty}
+                            </h2>
+                            <p className="timer">{formatTime(timeLeft)}</p>
+                        </div>
+                        <div className="progress-bar-background">
+                            <div className="progress-bar" style={{ width: `${progress}%`, backgroundColor: colors[difficulty] }} />
+                        </div>
+                        <h2 className="question-prompt">Найдите значение выражения</h2>
+                        <h2 className="example">{example} = ?</h2>
+                        <label className="answer-label">Ответ:</label>
+                        <input
+                            value={userAnswer}
+                            onChange={(e) => setUserAnswer(e.target.value)}
+                            onKeyPress={handleKeyPress}
+                            className="answer-input"
+                            placeholder="Введите ответ"
+                        />
+                        {errorMessage && <p className="error-message">{errorMessage}</p>}
+                        <button onClick={handleSubmit} className="submit-button" style={{ backgroundColor: colors[difficulty], color: "#fff" }}>
+                            Проверить
+                        </button>
                     </div>
-                    <div className="progress-bar-background">
-                        <div className="progress-bar" style={{ width: `${progress}%`, backgroundColor: colors[difficulty] }} />
-                    </div>
-                    <h2 className="question-prompt">Найдите значение выражения</h2>
-                    <h2 className="example">{example} = ?</h2>
-                    <label className="answer-label">Ответ:</label>
-                    <input
-                        value={userAnswer}
-                        onChange={(e) => setUserAnswer(e.target.value)}
-                        onKeyPress={handleKeyPress}
-                        className="answer-input"
-                        placeholder="Введите ответ"
-                    />
-                    {errorMessage && <p className="error-message">{errorMessage}</p>}
-                    <button onClick={handleSubmit} className="submit-button" style={{ backgroundColor: colors[difficulty], color: "#fff" }}>
-                        Проверить
-                    </button>
                 </div>
             ) : (
                 <div className="result-block">
