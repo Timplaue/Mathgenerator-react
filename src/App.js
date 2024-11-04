@@ -8,14 +8,14 @@ import WelcomeScreen from './components/WelcomeScreen';
 import Profile from './components/Profile';
 import Settings from './components/Settings';
 import NavMenu from './components/NavMenu';
-import {jwtDecode} from 'jwt-decode'; // исправлено импортирование
+import { jwtDecode } from 'jwt-decode';
 
 function App() {
     const [difficulty, setDifficulty] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isRegistering, setIsRegistering] = useState(false);
     const [currentScreen, setCurrentScreen] = useState('welcome');
-    const [settings, setSettings] = useState({ count: 2, operations: ['+', '-', '*', '/'] });
+    const [settings, setSettings] = useState({ count: 2, operations: ['+', '-', '*', '/'], timeLimit: 120 });
 
     const handleSelectDifficulty = (level) => {
         setDifficulty(level);
@@ -23,8 +23,12 @@ function App() {
     };
 
     const handleSaveSettings = (newSettings) => {
-        setSettings(newSettings);
-        setCurrentScreen('difficulty'); // Изменено с 'profile' на 'difficulty'
+        setSettings((prev) => ({ ...prev, ...newSettings }));
+        setCurrentScreen('difficulty');
+    };
+
+    const handleTimeChange = (newTime) => {
+        setSettings((prev) => ({ ...prev, timeLimit: newTime })); // Обновляем только время
     };
 
     const handleLogin = (token) => {
@@ -89,11 +93,16 @@ function App() {
                     ) : currentScreen === 'example' ? (
                         <Example
                             difficulty={difficulty}
-                            settings={settings} // передаем settings в Example
+                            settings={settings}
                             onBack={() => navigateTo('difficulty')}
                         />
                     ) : currentScreen === 'settings' ? (
-                        <Settings onSaveSettings={handleSaveSettings} onBack={() => navigateTo('profile')} />
+                        <Settings
+                            onSaveSettings={handleSaveSettings}
+                            onBack={() => navigateTo('profile')}
+                            initialTime={settings.timeLimit} // передаем текущее время
+                            onTimeChange={handleTimeChange} // передаем функцию изменения времени
+                        />
                     ) : (
                         <DifficultySelection onSelectDifficulty={handleSelectDifficulty} />
                     )}

@@ -17,8 +17,9 @@ function Example({ difficulty, onBack, settings }) {
     const [userAnswer, setUserAnswer] = useState('');
     const [correctCount, setCorrectCount] = useState(0);
     const [questionCount, setQuestionCount] = useState(0);
-    const [timeLeft, setTimeLeft] = useState(120);
+    const [timeLeft, setTimeLeft] = useState(settings.timeLimit || 120);
     const [progress, setProgress] = useState(0);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const colors = { easy: "#61C199", normal: "#E9CB30", hard: "#ED9069" };
     const resultImages = {
@@ -31,42 +32,32 @@ function Example({ difficulty, onBack, settings }) {
 
     const fetchExample = async () => {
         try {
-            let min, max;
-            // Устанавливаем диапазоны чисел в зависимости от сложности
-            switch (difficulty) {
-                case 'easy':
-                    min = 0;
-                    max = 9;
-                    break;
-                case 'normal':
-                    min = 0;
-                    max = 99;
-                    break;
-                case 'hard':
-                    min = 10;
-                    max = 99;
-                    break;
-                default:
-                    throw new Error('Неверная сложность');
-            }
-
+            const { min, max } = getDifficultyRange(difficulty);
             const response = await axios.get(`http://localhost:5000/api/math/generate`, {
                 params: {
                     difficulty,
                     count: settings.count,
                     operations: settings.operations.join(','),
-                    min, // передаем min
-                    max  // передаем max
+                    min,
+                    max
                 }
             });
-
-            if (response.data && response.data.example) {
+            if (response.data?.example) {
                 setExample(response.data.example);
             } else {
                 console.error("Неправильный ответ от сервера:", response.data);
             }
         } catch (error) {
             console.error("Ошибка при получении примера:", error);
+        }
+    };
+
+    const getDifficultyRange = (difficulty) => {
+        switch (difficulty) {
+            case 'easy': return { min: 0, max: 9 };
+            case 'normal': return { min: 0, max: 99 };
+            case 'hard': return { min: 10, max: 99 };
+            default: throw new Error('Неверная сложность');
         }
     };
 
@@ -81,13 +72,20 @@ function Example({ difficulty, onBack, settings }) {
     };
 
     const handleSubmit = async () => {
-        const correctAnswer = eval(example); // Важно: использование eval может быть небезопасным
+        if (userAnswer.trim() === '') {
+            setErrorMessage('Пожалуйста, введите ответ.');
+            return;
+        }
+
+        const correctAnswer = eval(example);
         if (parseInt(userAnswer) === correctAnswer) {
-            setCorrectCount(correctCount + 1);
+            setCorrectCount((prev) => prev + 1);
             await updateStatistics({ examplesSolved: 1 });
         }
-        setQuestionCount(questionCount + 1);
+        setQuestionCount((prev) => prev + 1);
         setUserAnswer('');
+        setErrorMessage('');
+
         if (questionCount + 1 < 10) {
             fetchExample();
         } else {
@@ -95,22 +93,30 @@ function Example({ difficulty, onBack, settings }) {
         }
     };
 
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            handleSubmit();
+        }
+    };
+
     const handleEndOfLevel = async () => {
-        const stats = correctCount >= 5 ? { levelsCompleted: 1, ...(correctCount === 9 && { perfectScores: 1 }) } : {};
+        const stats = correctCount >= 5 ? { levelsCompleted: 1, ...(correctCount === 10 && { perfectScores: 1 }) } : {};
         await updateStatistics(stats);
     };
 
-    const getResultMessage = () => (correctCount >= 9 ? "Все правильно, молодец!" : correctCount >= 5 ? "Так держать!" : "Могло быть и лучше.");
-
-    const getResultImage = () => resultImages[difficulty.toLowerCase()][correctCount >= 9 ? 'good' : correctCount >= 5 ? 'normal' : 'bad'];
+    const getResultMessage = () => correctCount >= 9 ? "Все правильно, молодец!" : correctCount >= 5 ? "Так держать!" : "Могло быть и лучше.";
+    const getResultImage = () => resultImages[difficulty][correctCount >= 9 ? 'good' : correctCount >= 5 ? 'normal' : 'bad'];
 
     useEffect(() => {
+        setTimeLeft(settings.timeLimit || 120);
         fetchExample();
-    }, [difficulty, settings]); // Добавил зависимость от difficulty и settings
+    }, [difficulty, settings]);
 
     useEffect(() => {
-        const timer = timeLeft > 0 && setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
-        return () => clearInterval(timer);
+        if (timeLeft > 0) {
+            const timer = setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
+            return () => clearInterval(timer);
+        }
     }, [timeLeft]);
 
     useEffect(() => {
@@ -137,20 +143,22 @@ function Example({ difficulty, onBack, settings }) {
                     <input
                         value={userAnswer}
                         onChange={(e) => setUserAnswer(e.target.value)}
+                        onKeyPress={handleKeyPress}
                         className="answer-input"
                         placeholder="Введите ответ"
                     />
+                    {errorMessage && <p className="error-message">{errorMessage}</p>}
                     <button onClick={handleSubmit} className="submit-button" style={{ backgroundColor: colors[difficulty], color: "#fff" }}>
                         Проверить
                     </button>
                 </div>
             ) : (
                 <div className="result-block">
-                    <img src={logo} alt="logo" className="example-logo"/>
+                    <img src={logo} alt="logo" className="example-logo" />
                     <h2>{getResultMessage()}</h2>
-                    <img src={getResultImage()} alt="result" className="result-image"/>
+                    <img src={getResultImage()} alt="result" className="result-image" />
                     <p>Количество правильных ответов: {correctCount} из 10</p>
-                    <button style={{ backgroundColor: colors[difficulty], color: "#fff" }} onClick={onBack} className="back-button">
+                    <button onClick={onBack} className="back-button" style={{ backgroundColor: colors[difficulty], color: "#fff" }}>
                         Вернуться к выбору сложности
                     </button>
                 </div>
