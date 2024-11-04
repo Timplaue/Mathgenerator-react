@@ -22,7 +22,6 @@ function Profile({ onLogout }) {
             setAvatar(response.data.avatarUrl || localStorage.getItem('avatarUrl'));
         } catch (error) {
             if (error.response && error.response.status === 401) {
-                // Токен истек, выходим из профиля
                 onLogout();
             } else {
                 console.error("Ошибка при получении профиля:", error);
@@ -31,15 +30,24 @@ function Profile({ onLogout }) {
         }
     };
 
-
     const handleAvatarUpload = (newAvatarUrl) => {
         setAvatar(newAvatarUrl);
-        localStorage.setItem('avatarUrl', newAvatarUrl); // Сохраните в localStorage
+        localStorage.setItem('avatarUrl', newAvatarUrl);
     };
 
     useEffect(() => {
         fetchProfile();
     }, []);
+
+    const formatTime = (seconds) => {
+        if (seconds === null || seconds === undefined) {
+            return "—"; // Возвращаем дефолтное значение, если seconds недопустимо
+        }
+
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+    };
 
     return (
         <div className="block3">
@@ -47,37 +55,34 @@ function Profile({ onLogout }) {
             {profileData && (
                 <div className="profile">
                     <div className="difficulty-header">
-                        <img src={logo} className="difficulty-logo" alt="logo"/>
-                        <h1 className="difficulty-header">Мат <br/>генератор</h1>
+                        <img src={logo} className="difficulty-logo" alt="logo" />
+                        <h1 className="difficulty-header">Мат <br />генератор</h1>
                     </div>
                     <h3>• Мой аккаунт</h3>
                     <div className="profile-container">
-                        <img src={avatar} alt="Аватар" className="avatar"/>
+                        <img src={avatar} alt="Аватар" className="avatar" />
                         <div className="profile-info">
                             <h2>{profileData.firstName}</h2>
                             <h2>{profileData.lastName}</h2>
                             <p>Создан: {new Date(profileData.registrationDate).toLocaleDateString()}</p>
-                            <AvatarUpload onAvatarUpload={handleAvatarUpload}/>
+                            <AvatarUpload onAvatarUpload={handleAvatarUpload} />
                         </div>
                     </div>
                     <h5>Логин: {profileData.username}</h5>
-                    <h5>Дата рождения: {profileData.birthDate ? new Date(profileData.birthDate).toLocaleDateString('ru-RU'):"Не указана"}</h5>
+                    <h5>Дата рождения: {profileData.birthDate ? new Date(profileData.birthDate).toLocaleDateString('ru-RU') : "Не указана"}</h5>
                     <h3>• Статистика</h3>
                     <div className="grid">
                         <div className="statistic">
-                            <h4>{profileData.statistics?.examplesSolved || 0}<span
-                                style={{color: "#434343", fontSize: "0.8em"}}> примеров решено</span></h4>
+                            <h4>{profileData.statistics?.examplesSolved || 0}<span style={{color: "#434343", fontSize: "0.8em"}}> примеров решено</span></h4>
                         </div>
                         <div className="statistic">
                             <h4>{profileData.statistics?.levelsCompleted || 0}<span style={{color: "#434343", fontSize: "0.8em"}}> уровней пройдено</span></h4>
                         </div>
                         <div className="statistic">
-                            <h4>{profileData.statistics?.perfectScores || 0}<span
-                                style={{color: "#434343", fontSize: "0.8em"}}> уровней на 10/10</span></h4>
+                            <h4>{profileData.statistics?.perfectScores || 0}<span style={{color: "#434343", fontSize: "0.8em"}}> уровней на 10/10</span></h4>
                         </div>
                         <div className="statistic">
-                            <h4>{profileData.statistics?.perfectScores || 0}<span
-                                style={{color: "#434343", fontSize: "0.8em"}}> уровней на 10/10</span></h4>
+                            <h4>{formatTime(profileData.statistics?.bestTime)}<span style={{color: "#434343", fontSize: "0.8em"}}> лучшее время</span></h4>
                         </div>
                     </div>
                     <button className="logout" onClick={onLogout}>Выйти</button>

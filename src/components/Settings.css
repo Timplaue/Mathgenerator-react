@@ -4,7 +4,7 @@
     align-items: center;
     width: 100%;
     max-width: 450px;
-    margin: 20vh auto;
+    margin: 20vh auto auto auto;
 }
 
 .settings-block h2 {

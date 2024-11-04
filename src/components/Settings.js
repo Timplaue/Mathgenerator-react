@@ -36,7 +36,7 @@ function Settings({ onSaveSettings, onBack, initialTime, onTimeChange }) {
 
     return (
         <div className="settings-block">
-            <div className="">
+            <div className="left">
                 <h2>Настройки примеров</h2>
 
                 <div className="setting-item">

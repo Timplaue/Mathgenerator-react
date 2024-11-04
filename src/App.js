@@ -99,7 +99,7 @@ function App() {
                     ) : currentScreen === 'settings' ? (
                         <Settings
                             onSaveSettings={handleSaveSettings}
-                            onBack={() => navigateTo('difficulty')} // изменено на переход в выбор сложности
+                            onBack={() => navigateTo('difficulty')}
                             initialTime={settings.timeLimit}
                             onTimeChange={handleTimeChange}
                         />

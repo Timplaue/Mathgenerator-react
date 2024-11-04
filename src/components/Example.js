@@ -5,12 +5,6 @@ import logo from '../assets/logo.svg';
 import goodResultEasy from '../assets/result/good-result-easy.svg';
 import normalResultEasy from '../assets/result/normal-result-easy.svg';
 import badResultEasy from '../assets/result/bad-result-easy.svg';
-import goodResultNormal from '../assets/result/good-result-normal.svg';
-import normalResultNormal from '../assets/result/normal-result-normal.svg';
-import badResultNormal from '../assets/result/bad-result-normal.svg';
-import goodResultHard from '../assets/result/good-result-hard.svg';
-import normalResultHard from '../assets/result/normal-result-hard.svg';
-import badResultHard from '../assets/result/bad-result-hard.svg';
 
 function Example({ difficulty, onBack, settings }) {
     const [example, setExample] = useState('');
@@ -20,12 +14,11 @@ function Example({ difficulty, onBack, settings }) {
     const [timeLeft, setTimeLeft] = useState(settings.timeLimit || 120);
     const [progress, setProgress] = useState(0);
     const [errorMessage, setErrorMessage] = useState('');
+    const [startTime] = useState(Date.now());
 
     const colors = { easy: "#61C199", normal: "#E9CB30", hard: "#ED9069" };
     const resultImages = {
-        easy: { good: goodResultEasy, normal: normalResultEasy, bad: badResultEasy },
-        normal: { good: goodResultNormal, normal: normalResultNormal, bad: badResultNormal },
-        hard: { good: goodResultHard, normal: normalResultHard, bad: badResultHard }
+        easy: { good: goodResultEasy, normal: normalResultEasy, bad: badResultEasy }
     };
 
     const formatTime = (seconds) => `${Math.floor(seconds / 60)}:${seconds % 60 < 10 ? '0' : ''}${seconds % 60}`;
@@ -36,13 +29,11 @@ function Example({ difficulty, onBack, settings }) {
                 params: {
                     difficulty,
                     count: settings.count,
-                    operations: settings.operations.join(',')
-                }
+                    operations: settings.operations.join(','),
+                },
             });
             if (response.data?.example) {
                 setExample(response.data.example);
-            } else {
-                console.error("Неправильный ответ от сервера:", response.data);
             }
         } catch (error) {
             console.error("Ошибка при получении примера:", error);
@@ -66,10 +57,13 @@ function Example({ difficulty, onBack, settings }) {
         }
 
         const correctAnswer = eval(example);
-        if (parseInt(userAnswer) === correctAnswer) {
+        const userAnswerInt = parseInt(userAnswer);
+
+        if (userAnswerInt === correctAnswer) {
             setCorrectCount((prev) => prev + 1);
             await updateStatistics({ examplesSolved: 1 });
         }
+
         setQuestionCount((prev) => prev + 1);
         setUserAnswer('');
         setErrorMessage('');
@@ -77,22 +71,32 @@ function Example({ difficulty, onBack, settings }) {
         if (questionCount + 1 < 10) {
             fetchExample();
         } else {
-            await handleEndOfLevel();
+            await handleEndOfLevel(correctCount + (userAnswerInt === correctAnswer ? 1 : 0));
         }
     };
 
-    const handleKeyPress = (e) => {
-        if (e.key === 'Enter') {
-            handleSubmit();
+    const handleEndOfLevel = async (finalCorrectCount) => {
+        const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+        const stats = { levelsCompleted: 1 };
+
+        if (finalCorrectCount === 10) {
+            stats.perfectScores = 1;
+            stats.levelTime = elapsedTime;
+        }
+
+        try {
+            await updateStatistics(stats);
+        } catch (error) {
+            console.error("Ошибка при обновлении статистики:", error);
         }
     };
 
-    const handleEndOfLevel = async () => {
-        const stats = correctCount >= 5 ? { levelsCompleted: 1, ...(correctCount === 10 && { perfectScores: 1 }) } : {};
-        await updateStatistics(stats);
+    const getResultMessage = () => {
+        if (correctCount === 10) return "Все правильно, молодец!";
+        if (correctCount >= 8) return "Почти правильно, молодец!";
+        return correctCount >= 5 ? "Так держать!" : "Могло быть и лучше.";
     };
 
-    const getResultMessage = () => correctCount >= 9 ? "Все правильно, молодец!" : correctCount >= 5 ? "Так держать!" : "Могло быть и лучше.";
     const getResultImage = () => resultImages[difficulty][correctCount >= 9 ? 'good' : correctCount >= 5 ? 'normal' : 'bad'];
 
     useEffect(() => {
@@ -132,7 +136,7 @@ function Example({ difficulty, onBack, settings }) {
                         <input
                             value={userAnswer}
                             onChange={(e) => setUserAnswer(e.target.value)}
-                            onKeyPress={handleKeyPress}
+                            onKeyPress={(e) => e.key === 'Enter' && handleSubmit()}
                             className="answer-input"
                             placeholder="Введите ответ"
                         />
