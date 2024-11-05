@@ -14,7 +14,7 @@ function AvatarUpload({ onAvatarUpload }) {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            onAvatarUpload(response.data.avatarUrl); // Передаем URL нового аватара
+            onAvatarUpload(response.data.avatarUrl);
         } catch (error) {
             console.error("Ошибка загрузки аватара:", error);
         }

@@ -5,6 +5,12 @@ import logo from '../assets/logo.svg';
 import goodResultEasy from '../assets/result/good-result-easy.svg';
 import normalResultEasy from '../assets/result/normal-result-easy.svg';
 import badResultEasy from '../assets/result/bad-result-easy.svg';
+import goodResultNormal from '../assets/result/good-result-normal.svg';
+import normalResultNormal from '../assets/result/normal-result-normal.svg';
+import badResultNormal from '../assets/result/bad-result-normal.svg';
+import goodResultHard from '../assets/result/good-result-hard.svg';
+import normalResultHard from '../assets/result/normal-result-hard.svg';
+import badResultHard from '../assets/result/bad-result-hard.svg';
 
 function Example({ difficulty, onBack, settings }) {
     const [example, setExample] = useState('');
@@ -18,7 +24,9 @@ function Example({ difficulty, onBack, settings }) {
 
     const colors = { easy: "#61C199", normal: "#E9CB30", hard: "#ED9069" };
     const resultImages = {
-        easy: { good: goodResultEasy, normal: normalResultEasy, bad: badResultEasy }
+        easy: { good: goodResultEasy, normal: normalResultEasy, bad: badResultEasy },
+        normal: { good: goodResultNormal, normal: normalResultNormal, bad: badResultNormal },
+        hard: { good: goodResultHard, normal: normalResultHard, bad: badResultHard }
     };
 
     const formatTime = (seconds) => `${Math.floor(seconds / 60)}:${seconds % 60 < 10 ? '0' : ''}${seconds % 60}`;
@@ -138,6 +146,7 @@ function Example({ difficulty, onBack, settings }) {
                             onChange={(e) => setUserAnswer(e.target.value)}
                             onKeyPress={(e) => e.key === 'Enter' && handleSubmit()}
                             className="answer-input"
+                            type="number"
                             placeholder="Введите ответ"
                         />
                         {errorMessage && <p className="error-message">{errorMessage}</p>}
