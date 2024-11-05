@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import "./Example.css";
 import logo from '../assets/logo.svg';
@@ -14,6 +14,7 @@ import badResultHard from '../assets/result/bad-result-hard.svg';
 
 function Example({ difficulty, onBack, settings }) {
     const [example, setExample] = useState('');
+    const [correctAnswer, setCorrectAnswer] = useState(null);
     const [userAnswer, setUserAnswer] = useState('');
     const [correctCount, setCorrectCount] = useState(0);
     const [questionCount, setQuestionCount] = useState(0);
@@ -31,7 +32,7 @@ function Example({ difficulty, onBack, settings }) {
 
     const formatTime = (seconds) => `${Math.floor(seconds / 60)}:${seconds % 60 < 10 ? '0' : ''}${seconds % 60}`;
 
-    const fetchExample = async () => {
+    const fetchExample = useCallback(async () => {
         try {
             const response = await axios.get(`http://localhost:5000/api/math/generate`, {
                 params: {
@@ -40,13 +41,14 @@ function Example({ difficulty, onBack, settings }) {
                     operations: settings.operations.join(','),
                 },
             });
-            if (response.data?.example) {
+            if (response.data) {
                 setExample(response.data.example);
+                setCorrectAnswer(response.data.answer);
             }
         } catch (error) {
             console.error("Ошибка при получении примера:", error);
         }
-    };
+    }, [difficulty, settings.count, settings.operations]);
 
     const updateStatistics = async (data) => {
         try {
@@ -64,8 +66,7 @@ function Example({ difficulty, onBack, settings }) {
             return;
         }
 
-        const correctAnswer = eval(example);
-        const userAnswerInt = parseInt(userAnswer);
+        const userAnswerInt = parseInt(userAnswer, 10);
 
         if (userAnswerInt === correctAnswer) {
             setCorrectCount((prev) => prev + 1);
@@ -110,7 +111,7 @@ function Example({ difficulty, onBack, settings }) {
     useEffect(() => {
         setTimeLeft(settings.timeLimit || 120);
         fetchExample();
-    }, [difficulty, settings]);
+    }, [difficulty, settings, fetchExample]);
 
     useEffect(() => {
         if (timeLeft > 0) {
@@ -144,7 +145,7 @@ function Example({ difficulty, onBack, settings }) {
                         <input
                             value={userAnswer}
                             onChange={(e) => setUserAnswer(e.target.value)}
-                            onKeyPress={(e) => e.key === 'Enter' && handleSubmit()}
+                            onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
                             className="answer-input"
                             type="number"
                             placeholder="Введите ответ"

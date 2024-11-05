@@ -64,7 +64,6 @@
     padding: 20px; /* Внутренние отступы */
     text-align: center; /* Центрирование текста */
     max-height: 10px; /* Минимальная высота для одинакового размера */
-    max-width: auto;
     display: flex;
     align-items: center; /* Вертикальное центрирование содержимого */
     justify-content: center; /* Горизонтальное центрирование содержимого */
