@@ -1,5 +1,5 @@
 import React from 'react';
-import "./Settings.css"
+import "./Settings.css";
 
 function Settings({ onSaveSettings, onBack, initialTime, onTimeChange }) {
     const [count, setCount] = React.useState(2);
@@ -7,9 +7,12 @@ function Settings({ onSaveSettings, onBack, initialTime, onTimeChange }) {
         '+': true,
         '-': true,
         '*': true,
-        '/': true
+        '/': true,
+        '^': false,
+        '√': false
     });
-    const [timeLimit, setTimeLimit] = React.useState(initialTime || 120); // Устанавливаем начальное время
+    const [timeLimit, setTimeLimit] = React.useState(initialTime || 120);
+    const [range, setRange] = React.useState({ min: 1, max: 99 });
 
     const handleOperationChange = (operation) => {
         setSelectedOperations((prev) => ({
@@ -20,8 +23,13 @@ function Settings({ onSaveSettings, onBack, initialTime, onTimeChange }) {
 
     const handleSave = () => {
         const operations = Object.keys(selectedOperations).filter((op) => selectedOperations[op]);
-        onSaveSettings({ count, operations, timeLimit }); // Добавляем время в настройки
-        onTimeChange(timeLimit); // Обновляем время в родительском компоненте
+        onSaveSettings({
+            count,
+            operations,
+            timeLimit,
+            range,
+        });
+        onTimeChange(timeLimit);
     };
 
     const handleCountChange = (e) => {
@@ -31,7 +39,15 @@ function Settings({ onSaveSettings, onBack, initialTime, onTimeChange }) {
 
     const handleTimeChange = (e) => {
         const value = parseInt(e.target.value, 10);
-        if (value >= 10) setTimeLimit(value); // Устанавливаем минимальное значение времени
+        if (value >= 10) setTimeLimit(value);
+    };
+
+    const handleRangeChange = (e) => {
+        const { name, value } = e.target;
+        setRange((prev) => ({
+            ...prev,
+            [name]: parseInt(value, 10)
+        }));
     };
 
     return (
@@ -54,7 +70,7 @@ function Settings({ onSaveSettings, onBack, initialTime, onTimeChange }) {
                 <div className="setting-item">
                     <h3>Выберите операции:</h3>
                     <div className="operations">
-                        {['+', '-', '*', '/'].map((operation) => (
+                        {['+', '-', '*', '/', '^', '√'].map((operation) => (
                             <label key={operation} className="operation-label">
                                 <input
                                     type="checkbox"
@@ -75,6 +91,28 @@ function Settings({ onSaveSettings, onBack, initialTime, onTimeChange }) {
                             min="10"
                             value={timeLimit}
                             onChange={handleTimeChange}
+                        />
+                    </label>
+                </div>
+
+                <div className="setting-item">
+                    <h3>Диапазон чисел:</h3>
+                    <label>
+                        Мин:
+                        <input
+                            type="number"
+                            name="min"
+                            value={range.min}
+                            onChange={handleRangeChange}
+                        />
+                    </label>
+                    <label>
+                        Макс:
+                        <input
+                            type="number"
+                            name="max"
+                            value={range.max}
+                            onChange={handleRangeChange}
                         />
                     </label>
                 </div>
