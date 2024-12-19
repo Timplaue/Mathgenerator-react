@@ -107,11 +107,11 @@
     font-size: 1.5rem;
 }
 .Finish {
-    font-family: Gotham;
+    font-family: Gotham, sans-serif;
     color: #696969;
 }
 .Finished {
-    font-family: Gotham-bold;
+    font-family: Gotham-bold, sans-serif;
     font-size: 80px;
     margin: 0px;
     margin-top: -20px;
