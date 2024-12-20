@@ -7,15 +7,20 @@ import Example from './components/Example';
 import WelcomeScreen from './components/WelcomeScreen';
 import Profile from './components/Profile';
 import Settings from './components/Settings';
+import Achievements from './components/Achievements';
 import NavMenu from './components/NavMenu';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 
 function App() {
     const [difficulty, setDifficulty] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isRegistering, setIsRegistering] = useState(false);
     const [currentScreen, setCurrentScreen] = useState('welcome');
-    const [settings, setSettings] = useState({ count: 2, operations: ['+', '-', '*', '/'], timeLimit: 120 });
+    const [settings, setSettings] = useState({
+        count: 2,
+        operations: ['+', '-', '*', '/'],
+        timeLimit: 120,
+    });
 
     const handleSelectDifficulty = (level) => {
         setDifficulty(level);
@@ -47,9 +52,7 @@ function App() {
 
     const toggleRegister = () => setIsRegistering(!isRegistering);
 
-    const navigateTo = (screen) => {
-        setCurrentScreen(screen);
-    };
+    const navigateTo = (screen) => setCurrentScreen(screen);
 
     const isTokenExpired = (token) => {
         if (!token) return true;
@@ -88,22 +91,24 @@ function App() {
                 )
             ) : (
                 <div>
-                    {currentScreen === 'profile' ? (
-                        <Profile onLogout={handleLogout} />
-                    ) : currentScreen === 'example' ? (
+                    {currentScreen === 'profile' && <Profile onLogout={handleLogout} />}
+                    {currentScreen === 'example' && (
                         <Example
                             difficulty={difficulty}
                             settings={settings}
                             onBack={() => navigateTo('difficulty')}
                         />
-                    ) : currentScreen === 'settings' ? (
+                    )}
+                    {currentScreen === 'settings' && (
                         <Settings
                             onSaveSettings={handleSaveSettings}
                             onBack={() => navigateTo('difficulty')}
                             initialTime={settings.timeLimit}
                             onTimeChange={handleTimeChange}
                         />
-                    ) : (
+                    )}
+                    {currentScreen === 'achievements' && <Achievements />}
+                    {currentScreen === 'difficulty' && (
                         <DifficultySelection onSelectDifficulty={handleSelectDifficulty} />
                     )}
                     <NavMenu onNavigate={navigateTo} />

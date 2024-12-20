@@ -1,0 +1,24 @@
+.achievements {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    margin: auto auto auto auto;
+    max-width: 450px;
+}
+.achievements-list {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    margin: 10vh auto auto auto;
+    max-width: 450px;
+}
+.achievement-card {
+    background: white;
+    border-radius: 10px;
+}
+.imagess {
+    max-width: 300px;
+    max-height: 300px;
+}

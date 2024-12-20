@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import AvatarUpload from './AvatarUpload';
 import './Profile.css';
+import Achievements from './Achievements';
 import logo from "../assets/logo.svg";
 
 function Profile({ onLogout }) {
     const [profileData, setProfileData] = useState(null);
     const [error, setError] = useState('');
     const [avatar, setAvatar] = useState('');
+    const [showAchievements, setShowAchievements] = useState(false);
 
     const fetchProfile = async () => {
         const token = localStorage.getItem('token');
@@ -28,6 +30,10 @@ function Profile({ onLogout }) {
                 setError("Ошибка при получении профиля");
             }
         }
+    };
+
+    const handleAchievementsClick = () => {
+        setShowAchievements(true);
     };
 
     const handleAvatarUpload = (newAvatarUrl) => {
@@ -52,7 +58,7 @@ function Profile({ onLogout }) {
     return (
         <div className="block3">
             {error && <p>{error}</p>}
-            {profileData && (
+            {profileData && !showAchievements && (
                 <div className="profile">
                     <div className="difficulty-header">
                         <img src={logo} className="difficulty-logo" alt="logo" />
@@ -73,21 +79,29 @@ function Profile({ onLogout }) {
                     <h3>• Статистика</h3>
                     <div className="grid">
                         <div className="statistic">
-                            <h4>{profileData.statistics?.examplesSolved || 0}<span style={{color: "#434343", fontSize: "0.8em"}}> примеров решено</span></h4>
+                            <h4>{profileData.statistics?.examplesSolved || 0}<span
+                                style={{color: "#434343", fontSize: "0.8em"}}> примеров решено</span></h4>
                         </div>
                         <div className="statistic">
-                            <h4>{profileData.statistics?.levelsCompleted || 0}<span style={{color: "#434343", fontSize: "0.8em"}}> уровней пройдено</span></h4>
+                            <h4>{profileData.statistics?.levelsCompleted || 0}<span
+                                style={{color: "#434343", fontSize: "0.8em"}}> уровней пройдено</span></h4>
                         </div>
                         <div className="statistic">
-                            <h4>{profileData.statistics?.perfectScores || 0}<span style={{color: "#434343", fontSize: "0.8em"}}> уровней на 10/10</span></h4>
+                            <h4>{profileData.statistics?.perfectScores || 0}<span
+                                style={{color: "#434343", fontSize: "0.8em"}}> уровней на 10/10</span></h4>
                         </div>
                         <div className="statistic">
-                            <h4>{formatTime(profileData.statistics?.bestTime)}<span style={{color: "#434343", fontSize: "0.8em"}}> лучшее время</span></h4>
+                            <h4>{formatTime(profileData.statistics?.bestTime)}<span
+                                style={{color: "#434343", fontSize: "0.8em"}}> лучшее время</span></h4>
                         </div>
+                        <button onClick={handleAchievementsClick}>Достижения</button>
                     </div>
                     <button className="logout" onClick={onLogout}>Выйти</button>
                 </div>
             )}
+
+            {/* Отображаем компонент достижений, если состояние showAchievements true */}
+            {showAchievements && <Achievements/>}
         </div>
     );
 }
