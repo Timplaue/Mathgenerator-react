@@ -11,6 +11,7 @@ function Settings({ onSaveSettings, onBack, initialTime, onTimeChange }) {
         '^': false,
         '√': false
     });
+    const [useBrackets, setUseBrackets] = React.useState(false);
     const [timeLimit, setTimeLimit] = React.useState(initialTime || 120);
     const [range, setRange] = React.useState({ min: 1, max: 99 });
 
@@ -26,6 +27,7 @@ function Settings({ onSaveSettings, onBack, initialTime, onTimeChange }) {
         onSaveSettings({
             count,
             operations,
+            useBrackets,
             timeLimit,
             range,
         });
@@ -81,6 +83,17 @@ function Settings({ onSaveSettings, onBack, initialTime, onTimeChange }) {
                             </label>
                         ))}
                     </div>
+                </div>
+
+                <div className="setting-item">
+                    <label>
+                        Включить скобки:
+                        <input
+                            type="checkbox"
+                            checked={useBrackets}
+                            onChange={() => setUseBrackets(!useBrackets)}
+                        />
+                    </label>
                 </div>
 
                 <div className="setting-item">
