@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import katex from 'katex';
+import 'katex/dist/katex.min.css'; // Подключаем стили для KaTeX
 import "./Example.css";
 import logo from '../assets/logo.svg';
 import goodResultEasy from '../assets/result/good-result-easy.svg';
@@ -37,13 +39,10 @@ function Example({ difficulty, onBack, settings }) {
     // Функция для получения примеров
     const fetchExample = useCallback(async () => {
         try {
+            let response;
             if (difficulty === 'normal') {
-                // Генерация квадратных уравнений
-                const response = await axios.get('http://localhost:5000/api/math/generate-quadratic');
-                setExample(response.data.example);
-                setCorrectAnswer(response.data.answer);
+                response = await axios.get('http://localhost:5000/api/math/generate-quadratic');
             } else if (difficulty === 'easy') {
-                // Генерация примеров для легкого уровня
                 const { range = { min: 1, max: 10 }, count = 2, operations = ['+', '-', '*', '/'] } = settings;
                 const queryParams = new URLSearchParams({
                     min: range.min,
@@ -51,15 +50,13 @@ function Example({ difficulty, onBack, settings }) {
                     count,
                     operations: operations.join(','),
                 });
-
-                const response = await axios.get(`http://localhost:5000/api/math/generate?${queryParams}`);
-                setExample(response.data.example);
-                setCorrectAnswer(response.data.answer);
+                response = await axios.get(`http://localhost:5000/api/math/generate?${queryParams}`);
             } else {
-                const response = await axios.get('http://localhost:5000/api/math/generate-log');
-                setExample(response.data.example);
-                setCorrectAnswer(response.data.answer);
+                response = await axios.get('http://localhost:5000/api/math/generate-log');
             }
+
+            setExample(response.data.example);
+            setCorrectAnswer(response.data.answer);
         } catch (error) {
             console.error("Ошибка при получении примера:", error);
             setErrorMessage('Не удалось загрузить пример. Попробуйте снова.');
@@ -143,6 +140,16 @@ function Example({ difficulty, onBack, settings }) {
         setProgress((questionCount / 10) * 100);
     }, [questionCount]);
 
+    const renderLatex = (latex) => {
+        try {
+            return katex.renderToString(latex, {
+                throwOnError: false,
+            });
+        } catch (error) {
+            return `<span style="color: red;">Ошибка LaTeX формулы</span>`;
+        }
+    };
+
     return (
         <div>
             {timeLeft > 0 && questionCount < 10 ? (
@@ -164,7 +171,12 @@ function Example({ difficulty, onBack, settings }) {
                         <h2 className="question-prompt">
                             {difficulty === 'normal' ? 'Найдите наибольший корень уравнения' : 'Найдите значение выражения'}
                         </h2>
-                        <h2 className="example">{example}</h2>
+                        <div
+                            className="example"
+                            dangerouslySetInnerHTML={{
+                                __html: renderLatex(example),
+                            }}
+                        />
                         <label className="answer-label">Ответ:</label>
                         <input
                             value={userAnswer}

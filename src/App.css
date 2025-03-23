@@ -12,3 +12,6 @@ body {
   background-image: url(../public/images/bg1.svg);
   font-family: 'Gotham-bold', Arial, sans-serif;
 }
+.katex {
+  font-family: 'Arial', sans-serif !important;
+}
