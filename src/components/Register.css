@@ -49,3 +49,35 @@ button.registration {
     cursor: pointer;
     transition: background-color 0.3s;
 }
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+}
+.politika {
+    color: #61C199;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+}
+.politika:hover{
+    color: #000000
+}
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.checkbox-container input {
+    width: 18px;
+    height: 18px;
+    accent-color: #000000; /* Цвет чекбокса */
+    cursor: pointer;
+}

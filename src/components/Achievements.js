@@ -32,9 +32,15 @@ function Achievements() {
                 {achievements.length > 0 ? (
                     achievements.map((achievement) => (
                         <div key={achievement._id} className="achievement-card">
-                            <img className="imagess" src={achievement.icon} alt={achievement.title} />
-                            <h3>{achievement.title}</h3>
-                            <p>{achievement.description}</p>
+                            <div className="achievement-content">
+                                <div className="achievement-image">
+                                    <img src={achievement.icon} alt={achievement.title} />
+                                </div>
+                                <div className="achievement-info">
+                                    <h3>{achievement.title}</h3>
+                                    <p>{achievement.description}</p>
+                                </div>
+                            </div>
                         </div>
                     ))
                 ) : (
