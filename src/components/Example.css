@@ -116,3 +116,81 @@
     margin: 0px;
     margin-top: -20px;
 }
+
+/* Стили для анимированного приветствия */
+.welcome-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.welcome-content {
+    text-align: center;
+    padding: 2rem;
+    max-width: 600px;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-logo {
+    width: 120px;
+    margin-bottom: 1.5rem;
+}
+
+.welcome-message {
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
+}
+
+.fade-in {
+    opacity: 0;
+    animation: fadeIn 0.8s forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.loading-spinner {
+    margin: 20px auto;
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(97, 193, 153, 0.3);
+    border-radius: 50%;
+    border-top-color: #61C199;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.welcome-message h1 {
+    color: #333;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.welcome-message h2 {
+    color: #444;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.welcome-message p {
+    color: #666;
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
