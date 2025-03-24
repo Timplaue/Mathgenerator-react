@@ -81,3 +81,50 @@ button.registration {
     accent-color: #000000; /* Цвет чекбокса */
     cursor: pointer;
 }
+
+/* Добавьте эти стили в ваш файл Register.css */
+
+/* Стиль для полей с ошибкой */
+.error-input {
+    border: 1px solid #e74c3c !important;
+    background-color: rgba(231, 76, 60, 0.05);
+}
+
+/* Стиль для сообщений об ошибках */
+.error-message {
+    color: #e74c3c;
+    font-size: 12px;
+    margin: 3px 0 10px 0;
+    font-weight: normal;
+}
+
+/* Блок с ошибками даты */
+.date-errors {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+/* Улучшение доступности для чекбокса */
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    margin: 15px 0;
+}
+
+.checkbox-container input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+/* Улучшение стиля кнопок для более чёткой обратной связи */
+button.registration {
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+button.registration:hover {
+    opacity: 0.9;
+}
+
+button.registration:active {
+    transform: scale(0.98);
+}

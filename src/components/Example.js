@@ -52,7 +52,8 @@ function Example({ difficulty, onBack, settings }) {
                 });
                 response = await axios.get(`http://localhost:5000/api/math/generate?${queryParams}`);
             } else {
-                response = await axios.get('http://localhost:5000/api/math/generate-log');
+                const queryParams = new URLSearchParams({ operations: settings.operations.join(',') });
+                response = await axios.get(`http://localhost:5000/api/math/generate-log?${queryParams}`);
             }
 
             setExample(response.data.example);
