@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import "./Settings.css";
 
 function Settings({ onSaveSettings, onBack, initialTime, onTimeChange }) {
@@ -11,9 +11,40 @@ function Settings({ onSaveSettings, onBack, initialTime, onTimeChange }) {
         '^': false,
         '√': false
     });
-    const [useBrackets, setUseBrackets] = React.useState(false);
+    const [useBrackets, setUseBrackets] = React.useState(true);
     const [timeLimit, setTimeLimit] = React.useState(initialTime || 120);
     const [range, setRange] = React.useState({ min: 1, max: 99 });
+
+    // Загрузка настроек из localStorage при первом рендере
+    useEffect(() => {
+        const savedSettings = localStorage.getItem('mathSettings');
+        if (savedSettings) {
+            const parsedSettings = JSON.parse(savedSettings);
+
+            // Загружаем сохраненные настройки
+            setCount(parsedSettings.count || 2);
+
+            // Обновляем выбранные операции
+            if (parsedSettings.operations) {
+                const opState = {
+                    '+': false,
+                    '-': false,
+                    '*': false,
+                    '/': false,
+                    '^': false,
+                    '√': false
+                };
+                parsedSettings.operations.forEach(op => {
+                    opState[op] = true;
+                });
+                setSelectedOperations(opState);
+            }
+
+            setUseBrackets(parsedSettings.useBrackets || false);
+            setTimeLimit(parsedSettings.timeLimit || initialTime || 120);
+            setRange(parsedSettings.range || { min: 1, max: 99 });
+        }
+    }, [initialTime]);
 
     const handleOperationChange = (operation) => {
         setSelectedOperations((prev) => ({
@@ -24,13 +55,25 @@ function Settings({ onSaveSettings, onBack, initialTime, onTimeChange }) {
 
     const handleSave = () => {
         const operations = Object.keys(selectedOperations).filter((op) => selectedOperations[op]);
-        onSaveSettings({
+
+        // Проверяем, что выбрана хотя бы одна операция
+        if (operations.length === 0) {
+            alert('Пожалуйста, выберите хотя бы одну операцию');
+            return;
+        }
+
+        const settings = {
             count,
             operations,
             useBrackets,
             timeLimit,
             range,
-        });
+        };
+
+        // Сохраняем настройки в localStorage
+        localStorage.setItem('mathSettings', JSON.stringify(settings));
+
+        onSaveSettings(settings);
         onTimeChange(timeLimit);
     };
 

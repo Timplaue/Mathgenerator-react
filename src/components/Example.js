@@ -15,12 +15,36 @@ import normalResultHard from '../assets/result/normal-result-hard.svg';
 import badResultHard from '../assets/result/bad-result-hard.svg';
 
 function Example({ difficulty, onBack, settings }) {
+    // Загрузка настроек из localStorage если они не были переданы
+    const [localSettings, setLocalSettings] = useState(settings);
+
+    useEffect(() => {
+        // Если настройки не были переданы, пытаемся загрузить их из localStorage
+        if (!settings || Object.keys(settings).length === 0) {
+            const savedSettings = localStorage.getItem('mathSettings');
+            if (savedSettings) {
+                setLocalSettings(JSON.parse(savedSettings));
+            } else {
+                // Устанавливаем дефолтные настройки, если ничего не найдено
+                setLocalSettings({
+                    timeLimit: 120,
+                    range: { min: 1, max: 10 },
+                    count: 2,
+                    operations: ['+', '-', '*', '/'],
+                    useBrackets: true
+                });
+            }
+        } else {
+            setLocalSettings(settings);
+        }
+    }, [settings]);
+
     const [example, setExample] = useState('');
     const [correctAnswer, setCorrectAnswer] = useState(null);
     const [userAnswer, setUserAnswer] = useState('');
     const [correctCount, setCorrectCount] = useState(0);
     const [questionCount, setQuestionCount] = useState(0);
-    const [timeLeft, setTimeLeft] = useState(settings.timeLimit || 120);
+    const [timeLeft, setTimeLeft] = useState(localSettings?.timeLimit || 120);
     const [elapsedTime, setElapsedTime] = useState(0);
     const [progress, setProgress] = useState(0);
     const [errorMessage, setErrorMessage] = useState('');
@@ -38,12 +62,14 @@ function Example({ difficulty, onBack, settings }) {
 
     // Функция для получения примеров
     const fetchExample = useCallback(async () => {
+        if (!localSettings) return; // Выходим, если настройки еще не загружены
+
         try {
             let response;
             if (difficulty === 'normal') {
                 response = await axios.get('http://localhost:5000/api/math/generate-quadratic');
             } else if (difficulty === 'easy') {
-                const { range = { min: 1, max: 10 }, count = 2, operations = ['+', '-', '*', '/'] } = settings;
+                const { range = { min: 1, max: 10 }, count = 2, operations = ['+', '-', '*', '/'] } = localSettings;
                 const queryParams = new URLSearchParams({
                     min: range.min,
                     max: range.max,
@@ -52,7 +78,9 @@ function Example({ difficulty, onBack, settings }) {
                 });
                 response = await axios.get(`http://localhost:5000/api/math/generate?${queryParams}`);
             } else {
-                const queryParams = new URLSearchParams({ operations: settings.operations.join(',') });
+                const queryParams = new URLSearchParams({
+                    operations: localSettings.operations ? localSettings.operations.join(',') : '+,-,*,/'
+                });
                 response = await axios.get(`http://localhost:5000/api/math/generate-log?${queryParams}`);
             }
 
@@ -62,7 +90,7 @@ function Example({ difficulty, onBack, settings }) {
             console.error("Ошибка при получении примера:", error);
             setErrorMessage('Не удалось загрузить пример. Попробуйте снова.');
         }
-    }, [difficulty, settings]);
+    }, [difficulty, localSettings]);
 
     // Функция для отправки статистики на сервер
     const updateStatistics = async (data) => {
@@ -126,9 +154,11 @@ function Example({ difficulty, onBack, settings }) {
 
     // Эффекты
     useEffect(() => {
-        setTimeLeft(settings.timeLimit || 120);
-        fetchExample();
-    }, [settings, fetchExample]);
+        if (localSettings) {
+            setTimeLeft(localSettings.timeLimit || 120);
+            fetchExample();
+        }
+    }, [localSettings, fetchExample]);
 
     useEffect(() => {
         if (timeLeft > 0) {
