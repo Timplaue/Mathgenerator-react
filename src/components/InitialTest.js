@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
@@ -15,6 +15,8 @@ function InitialTest({ onComplete }) {
     const [age, setAge] = useState(null);
     const [birthDate, setBirthDate] = useState(null);
     const [welcomePhase, setWelcomePhase] = useState(1);
+
+    const examplesGenerated = useRef(false);
 
     const fetchUserData = async () => {
         try {
@@ -35,8 +37,10 @@ function InitialTest({ onComplete }) {
         const timer = setTimeout(() => {
             if (welcomePhase < 3) {
                 setWelcomePhase(welcomePhase + 1);
-            } else {
+            } else if (!examplesGenerated.current) {
                 // После показа всех приветствий, начинаем загрузку примеров
+                examplesGenerated.current = true;
+
                 if (birthDate) {
                     const today = new Date();
                     const birthDateObj = new Date(birthDate);
@@ -58,22 +62,6 @@ function InitialTest({ onComplete }) {
 
         return () => clearTimeout(timer);
     }, [welcomePhase, birthDate]);
-
-    useEffect(() => {
-        if (birthDate && welcomePhase >= 3) {
-            const today = new Date();
-            const birthDateObj = new Date(birthDate);
-            let calculatedAge = today.getFullYear() - birthDateObj.getFullYear();
-
-            const m = today.getMonth() - birthDateObj.getMonth();
-            if (m < 0 || (m === 0 && today.getDate() < birthDateObj.getDate())) {
-                calculatedAge--;
-            }
-
-            setAge(calculatedAge);
-            generateExamplesForAge(calculatedAge);
-        }
-    }, [birthDate, welcomePhase]);
 
     const generateExamplesForAge = async (age) => {
         try {
@@ -164,6 +152,7 @@ function InitialTest({ onComplete }) {
         return generatedExamples;
     };
 
+    // Остальные функции остаются без изменений
     const handleAnswerChange = (e) => {
         setCurrentAnswer(e.target.value);
         setErrorMessage('');
